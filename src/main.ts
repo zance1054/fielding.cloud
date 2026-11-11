@@ -1,4 +1,5 @@
 import { Effect } from "effect"
+import posthog, { posthogEnabled, posthogLogger } from "./posthog"
 import "./style.css"
 
 declare global {
@@ -12,6 +13,10 @@ declare global {
 const FINALE = 2.3
 
 const root = document.documentElement
+
+const capture = (event: string, properties?: Record<string, string>) => {
+  if (posthogEnabled) posthog.capture(event, properties)
+}
 
 const once = (target: EventTarget, event: string) =>
   Effect.callback<void>((resume) => {
@@ -83,7 +88,14 @@ const playIntro = (intro: HTMLDialogElement, video: HTMLVideoElement) =>
     Effect.raceFirst(once(intro, "close").pipe(Effect.as(false))),
     Effect.andThen((played) =>
       Effect.sync(() => {
-        if (played) markSeen()
+        if (played) {
+          markSeen()
+          capture("intro_completed")
+          posthogLogger.info("intro playback completed", {
+            component: "intro",
+            outcome: "completed",
+          })
+        }
         root.dataset.intro = "done"
         if (intro.open) intro.close()
       }),
@@ -99,12 +111,42 @@ if (intro && video) {
   intro.querySelector("button")?.addEventListener("click", () => intro.close())
 
   document.querySelector(".replay")?.addEventListener("click", () => {
+    capture("intro_replayed")
+    posthogLogger.info("intro replay requested", {
+      component: "intro",
+      action: "replayed",
+    })
     root.dataset.intro = "play"
     video.currentTime = 0
     intro.showModal()
     Effect.runFork(playIntro(intro, video))
   })
 }
+
+const portfolioDestinations: Record<string, string> = {
+  "/": "home",
+  "/projects/": "projects",
+  "/experience/": "experience",
+  "/hobbies/": "hobbies",
+}
+
+document.addEventListener("click", (event) => {
+  if (!(event.target instanceof Element)) return
+  const link = event.target.closest<HTMLAnchorElement>("a[href]")
+  if (!link) return
+
+  const destination = new URL(link.href)
+  if (destination.protocol === "mailto:") {
+    capture("contact_link_clicked", { contact_method: "email" })
+  } else if (destination.hostname === "www.linkedin.com") {
+    capture("contact_link_clicked", { contact_method: "linkedin" })
+  } else if (destination.hostname === "github.com") {
+    capture("contact_link_clicked", { contact_method: "github" })
+  } else if (destination.origin === location.origin && !destination.hash) {
+    const portfolioDestination = portfolioDestinations[destination.pathname]
+    if (portfolioDestination) capture("portfolio_navigation_clicked", { destination: portfolioDestination })
+  }
+})
 
 // Jump links (Projects, Experience) show which part of the page is in view: the last one whose
 // heading has passed under the two bars.

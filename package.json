@@ -9,7 +9,8 @@
     "intro:render": "bash blender/render.sh"
   },
   "dependencies": {
-    "effect": "^4.1.2"
+    "effect": "^4.1.2",
+    "posthog-js": "^1.447.9"
   },
   "devDependencies": {
     "typescript": "^7.0.2",
