@@ -50,28 +50,27 @@
       (() => {
         const root = document.documentElement;
         const intro = document.getElementById("intro");
-        if (root.dataset.intro !== "play") return;
-        // Leaving the intro by any route, Escape included, means it has been seen.
-        const done = () => {
+        // The one way out of the intro, whatever closes it: Skip, Escape, src/main.ts at the
+        // finale or on Replay, or the failsafe. Leaving does not record the intro as seen;
+        // src/main.ts does that when the video starts playing.
+        const leave = () => {
           root.dataset.intro = "done";
-          try {
-            localStorage.setItem("intro-seen", "1");
-          } catch {}
           if (intro.open) intro.close();
         };
-        intro.addEventListener("close", done); // Escape closes a modal dialog natively
-        intro.querySelector("button").addEventListener("click", done);
+        intro.addEventListener("close", leave); // Escape closes a modal dialog natively
+        intro.querySelector("button").addEventListener("click", leave);
+        if (root.dataset.intro !== "play") return;
         try {
           intro.showModal(); // modal: the page behind is inert and focus starts on Skip
         } catch {
-          done();
+          leave();
           return;
         }
         const video = intro.querySelector("video");
         video.preload = "auto";
         video.load();
         // src/main.ts cancels this once frames are on screen; otherwise the page is shown anyway.
-        window.introFailsafe = setTimeout(done, 4000);
+        window.introFailsafe = setTimeout(leave, 4000);
       })();
     </script>
 

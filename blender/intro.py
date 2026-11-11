@@ -17,7 +17,7 @@ import bpy
 from bpy_extras.anim_utils import action_get_channelbag_for_slot
 
 CUT = os.environ.get("INTRO_CUT", "wide")
-FONT = Path(os.environ.get("INTRO_FONT_DIR", Path(__file__).parent / "fonts")) / "ArchivoBlack-Regular.ttf"
+FONT = Path(__file__).parent / "fonts" / "ArchivoBlack-Regular.ttf"
 
 # One stud pitch is 1 unit; real bricks are 8 mm pitch, 9.6 mm tall.
 BRICK_H = 1.2
@@ -87,6 +87,21 @@ def material(name, rgb, roughness, coat=0.0, emission=0.0):
     return mat
 
 
+def brick_material(name, rgb):
+    """The glossy plastic every brick is made of."""
+    return material(name, rgb, 0.28, coat=0.35)
+
+
+def brick_object(name, mesh, mat):
+    """Link a brick, with the fine bevel that lets its edges catch the light."""
+    obj = bpy.data.objects.new(name, mesh)
+    obj.data.materials.append(mat)
+    bpy.context.scene.collection.objects.link(obj)
+    bevel = obj.modifiers.new("Bevel", "BEVEL")
+    bevel.width, bevel.segments, bevel.limit_method = 0.03, 2, "ANGLE"
+    return obj
+
+
 def key(target, path, keys, index=-1):
     """Insert (frame, value, interpolation, easing) keyframes on one property."""
     for frame, value, _, _ in keys:
@@ -105,15 +120,9 @@ def key(target, path, keys, index=-1):
 
 def add_brick(name, mesh, mat, location, land, turned=False, fall=FALL):
     """Link a brick and drop it so it lands on `land`. Studded bricks click and stop: no bounce."""
-    obj = bpy.data.objects.new(name, mesh.copy())  # own mesh, so each brick keeps its own colour
-    obj.data.materials.append(mat)
-    bpy.context.scene.collection.objects.link(obj)
+    obj = brick_object(name, mesh.copy(), mat)  # own mesh, so each brick keeps its own colour
     obj.location = location
     obj.rotation_euler.z = math.pi / 2 if turned else 0.0
-    bevel = obj.modifiers.new("Bevel", "BEVEL")
-    bevel.width = 0.03
-    bevel.segments = 2
-    bevel.limit_method = "ANGLE"
     high = location[2] + DROP_HEIGHT
     start = max(land - fall, 1)
     key(
@@ -171,7 +180,7 @@ def add_glow(name, mat, location, landings):
 
 def build_pipeline():
     """Returns (frame the last cap lands, x of each stage)."""
-    mats = {n: material(f"Brick {n}", rgb, 0.28, coat=0.35) for n, rgb in COLORS.items() if n != "green"}
+    mats = {n: brick_material(f"Brick {n}", rgb) for n, rgb in COLORS.items() if n != "green"}
     material("Label", (0.85, 0.85, 0.82), 0.6, emission=0.35)
     long_brick, cap_mesh = brick_mesh(4), brick_mesh(4, 4)
     xs = [(i - (len(STAGES) - 1) / 2) * STAGE_PITCH for i in range(len(STAGES))]
@@ -205,7 +214,7 @@ def build_pipeline():
                 turned,
             )
         top = courses * BRICK_H
-        green = material(f"Cap {label}", COLORS["green"], 0.28, coat=0.35)
+        green = brick_material(f"Cap {label}", COLORS["green"])
         add_brick(f"{label} cap", cap_mesh, green, (x, 0, top), cap, fall=FINAL_FALL if cap == finale else FALL)
         add_glow(f"{label} glow", green, (x, -2.6, top + BRICK_H + 0.6), sorted({cap, finale}))
         add_label(label, x, cap)
@@ -265,6 +274,8 @@ SHOTS = {
     "wide": (45, (4, -24, 5), (-7, 0, 1.6), (25, -44, 11), (-10, 0, 1.6)),
     "tall": (45, (2, -26, 6), (-7, 0, 0.5), (16, -56, 15), (0.6, 0, -8)),
 }
+# 1440p: sharp when the hero fills a large or high-density screen.
+SIZES = {"wide": (2560, 1440), "tall": (1440, 2560)}
 
 
 def animate_camera(cam, target, finale):
@@ -294,7 +305,8 @@ def animate_camera(cam, target, finale):
     )
 
 
-def configure_render(end):
+def configure_render(end, size):
+    """Render settings shared by every scene. `size` is (width, height) in pixels."""
     scene = bpy.context.scene
     try:
         scene.render.engine = "BLENDER_EEVEE"
@@ -302,9 +314,7 @@ def configure_render(end):
         print("engine fallback:", err)
     scene.render.fps = FPS
     scene.frame_start, scene.frame_end = 1, end
-    # 1440p: sharp when the hero fills a large or high-density screen.
-    width, height = (2560, 1440) if CUT == "wide" else (1440, 2560)
-    scene.render.resolution_x, scene.render.resolution_y = width, height
+    scene.render.resolution_x, scene.render.resolution_y = size
     scene.render.use_motion_blur = True
     scene.view_settings.view_transform = "AgX"
     scene.view_settings.look = "AgX - Punchy"  # plain AgX washes the brick colours out
@@ -328,7 +338,7 @@ def main():
     finale, _ = build_pipeline()
     end = finale + TAIL
     animate_camera(cam, target, finale)
-    configure_render(end)
+    configure_render(end, SIZES[CUT])
     bpy.context.scene.frame_set(end)
     # The page starts its own entrance when the last cap lands; print the time it needs.
     print(f"cut={CUT} finale={finale} end={end} finale_seconds={(finale - 1) / FPS:.3f} seconds={end / FPS:.2f}")

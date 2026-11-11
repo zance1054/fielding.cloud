@@ -2,7 +2,7 @@
 # Both stages use Docker Hardened Images, which need `docker login dhi.io` to pull.
 FROM dhi.io/node:24-dev AS build
 WORKDIR /app
-RUN npm install --global pnpm@12.18.0
+RUN npm install --global --ignore-scripts pnpm@12.18.0
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .

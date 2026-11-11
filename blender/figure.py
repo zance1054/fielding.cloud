@@ -52,8 +52,8 @@ def box(name, size, location, mat, parent, offset=(0, 0, 0), taper=1.0, bevel=0.
     bm = bmesh.new()
     verts = bmesh.ops.create_cube(bm, size=1.0)["verts"]
     bmesh.ops.scale(bm, vec=size, verts=verts)
-    if taper != 1.0:
-        bmesh.ops.scale(bm, vec=(taper, 1, 1), verts=[v for v in verts if v.co.z > 0])
+    # A taper of 1 leaves the top face as it is.
+    bmesh.ops.scale(bm, vec=(taper, 1, 1), verts=[v for v in verts if v.co.z > 0])
     bmesh.ops.translate(bm, vec=offset, verts=verts)
     return link(name, bm, mat, parent, location, bevel)
 

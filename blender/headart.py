@@ -80,6 +80,6 @@ def read_head(rgb):
     hair = fill_holes(close(warm | (dark & dilate(warm, 12) & ~inside), 3))
 
     outline = dilate(face, 12)
-    cols_used, rows_used = np.where(outline.any(axis=0))[0], np.where(outline.any(axis=1))[0]
+    cols_used, rows_used = np.nonzero(outline.any(axis=0))[0], np.nonzero(outline.any(axis=1))[0]
     box = (cols_used[0], cols_used[-1], rows_used[0], rows_used[-1])
     return {"face": face, "ink": ink, "white": white, "hair": hair, "skin": skin, "box": box}

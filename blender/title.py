@@ -15,7 +15,7 @@ import bpy
 
 sys.path.insert(0, str(Path(__file__).parent))
 from figure import build_figure
-from intro import BRICK_H, COLORS, FPS, brick_mesh, build_stage, clear_scene, configure_render, key, material
+from intro import BRICK_H, COLORS, FPS, brick_material, brick_mesh, brick_object, build_stage, clear_scene, configure_render, key, material
 
 WORD = os.environ.get("TITLE_WORD", "PROJECTS").upper()
 
@@ -92,7 +92,7 @@ def throw_bricks(bricks, centres, path, arrive, beats):
     place.
     `arrive` is the frame each letter starts. Returns the frame the last brick lands."""
     rng = random.Random(7)
-    mats = {name: material(f"Brick {name}", COLORS[name], 0.28, coat=0.35) for name in LETTER_COLORS}
+    mats = {name: brick_material(f"Brick {name}", COLORS[name]) for name in LETTER_COLORS}
     meshes = {length: brick_mesh(length, 1) for length in range(1, 5)}
     window = BUILD / len(WORD)
     finale = 0
@@ -104,11 +104,8 @@ def throw_bricks(bricks, centres, path, arrive, beats):
             launch, arm = min(beats, key=lambda beat: abs(beat[0] - due))
             land = launch + FLIGHT
             finale = max(finale, land)
-            obj = bpy.data.objects.new(f"{WORD[index]}{index} {n}", meshes[length].copy())
-            obj.data.materials.append(mats[LETTER_COLORS[index % len(LETTER_COLORS)]])
-            bpy.context.scene.collection.objects.link(obj)
-            bevel = obj.modifiers.new("Bevel", "BEVEL")
-            bevel.width, bevel.segments, bevel.limit_method = 0.03, 2, "ANGLE"
+            mat = mats[LETTER_COLORS[index % len(LETTER_COLORS)]]
+            obj = brick_object(f"{WORD[index]}{index} {n}", meshes[length].copy(), mat)
 
             hand = tuple(c + rng.uniform(-0.25, 0.25) for c in hand_at(path_x(path, launch), arm))
             target = (x, 0.0, row * BRICK_H)
@@ -294,14 +291,10 @@ def plant_tree(x, sprout):
     tree.location = (x, TREE_Y, 0)
     bpy.context.scene.collection.objects.link(tree)
     trunk = material("Trunk", (0.12, 0.05, 0.02), 0.4, coat=0.2)
-    leaf = material("Leaf", COLORS["green"], 0.28, coat=0.35)
+    leaf = brick_material("Leaf", COLORS["green"])
     for n, (size, mat) in enumerate([(1, trunk), (1, trunk), (3, leaf), (2, leaf), (1, leaf)]):
-        obj = bpy.data.objects.new(f"Tree {n}", brick_mesh(size, size))
-        obj.data.materials.append(mat)
+        obj = brick_object(f"Tree {n}", brick_mesh(size, size), mat)
         obj.parent, obj.location = tree, (0, 0, n * BRICK_H)
-        bpy.context.scene.collection.objects.link(obj)
-        bevel = obj.modifiers.new("Bevel", "BEVEL")
-        bevel.width, bevel.segments, bevel.limit_method = 0.03, 2, "ANGLE"
     grown = [(1, (0.0,) * 3, "CONSTANT", "AUTO"), (sprout, (0.3, 0.3, 0.0), "BACK", "EASE_OUT"), (sprout + 12, (1.0,) * 3, "LINEAR", "AUTO")]
     key(tree, "scale", grown)
 
@@ -333,10 +326,8 @@ def main():
         plant_tree(rest_x + TREE_GAP, arrived + 8)
     frame_shot(cam, target, -right, rest_x + (TREE_GAP + 2.5 if PLANT else 2.5))
     end = finale + TAIL + PLANT
-    configure_render(end)
-    scene = bpy.context.scene
-    scene.render.resolution_x, scene.render.resolution_y = SIZE
-    scene.frame_set(end)
+    configure_render(end, SIZE)
+    bpy.context.scene.frame_set(end)
     print(f"word={WORD} bricks={len(bricks)} finale={finale} end={end} seconds={end / FPS:.2f}")
 
 

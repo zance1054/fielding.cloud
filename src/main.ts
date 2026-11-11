@@ -67,27 +67,23 @@ const markSeen = () => {
 }
 
 /**
- * Plays the intro in its open dialog and hands over to the page as the last cap lands; the
- * video's remaining frames play out under the dialog's fade. Closing the dialog (Skip, Escape)
- * ends it early. A visitor who never saw it play is not marked as having seen it.
+ * Plays the intro in its open dialog and closes it as the last cap lands; the video's remaining
+ * frames play out under the dialog's fade. Closing the dialog (Skip, Escape) ends it early.
+ *
+ * A visitor has seen the intro once the video starts playing, and this is the only place that
+ * records it: blocked autoplay, a video that can't load and leaving before it starts don't count.
+ * Leaving itself belongs to the inline script in index.html, which runs when the dialog closes.
  */
 const playIntro = (intro: HTMLDialogElement, video: HTMLVideoElement) =>
   Effect.gen(function* () {
-    const started = yield* start(video)
-    if (!started) return false
+    if (!(yield* start(video))) return
+    markSeen()
     clearTimeout(window.introFailsafe)
     // A stall mid-playback must not hold the page back for long.
     yield* Effect.raceFirst(reached(video, FINALE), Effect.sleep("6 seconds"))
-    return true
   }).pipe(
-    Effect.raceFirst(once(intro, "close").pipe(Effect.as(false))),
-    Effect.andThen((played) =>
-      Effect.sync(() => {
-        if (played) markSeen()
-        root.dataset.intro = "done"
-        if (intro.open) intro.close()
-      }),
-    ),
+    Effect.raceFirst(once(intro, "close")),
+    Effect.andThen(Effect.sync(() => intro.close())),
   )
 
 const intro = document.querySelector<HTMLDialogElement>("#intro")
@@ -95,8 +91,6 @@ const video = intro?.querySelector("video")
 
 if (intro && video) {
   if (root.dataset.intro === "play" && intro.open) Effect.runFork(playIntro(intro, video))
-
-  intro.querySelector("button")?.addEventListener("click", () => intro.close())
 
   document.querySelector(".replay")?.addEventListener("click", () => {
     root.dataset.intro = "play"

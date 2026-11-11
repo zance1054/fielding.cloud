@@ -1,7 +1,9 @@
 node_modules
 dist
 blender/frames
+__pycache__
 .firecrawl
 specs
 GLOSSARY.md
 docs/adr
+.env

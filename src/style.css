@@ -220,7 +220,7 @@ main:focus {
   text-underline-offset: 0.45em;
 }
 
-/* ---------- Page title (Projects, Experience) ---------- */
+/* ---------- Page title (every page but the home page and the 404 page) ---------- */
 
 .visually-hidden {
   position: absolute;
