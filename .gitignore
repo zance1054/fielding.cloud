@@ -5,3 +5,4 @@ blender/frames
 specs
 GLOSSARY.md
 docs/adr
+.env
