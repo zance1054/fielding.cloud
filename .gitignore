@@ -1,0 +1,7 @@
+node_modules
+dist
+blender/frames
+.firecrawl
+specs
+GLOSSARY.md
+docs/adr

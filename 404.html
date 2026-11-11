@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Not found · Alexander Fielding</title>
+    <meta
+      name="description"
+      content="This page does not exist on fielding.cloud."
+    />
+    <meta property="og:title" content="Not found · Alexander Fielding" />
+    <meta property="og:description" content="This page does not exist on fielding.cloud." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://fielding.cloud/intro/hero-wide.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <nav aria-label="Site">
+        <a href="/#about">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/experience/">Experience</a>
+        <a href="/hobbies/">Hobbies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="section lost">
+        <h1 class="studded">No bricks at this address</h1>
+        <p class="aside">It may have rolled under the couch.</p>
+        <p id="asked">The link you followed doesn't go anywhere. These do.</p>
+        <script>
+          // Name the address that was asked for, so a typo is easy to spot.
+          document.getElementById("asked").textContent = `There is nothing at ${location.pathname}. Check the address for a typo, or try one of these.`;
+        </script>
+        <div class="actions">
+          <a class="brick brick-red" href="/">Back to the start</a>
+          <a class="brick brick-ghost" href="/projects/">Projects</a>
+          <a class="brick brick-ghost" href="/experience/">Experience</a>
+          <a class="brick brick-ghost" href="/hobbies/">Hobbies</a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="course" aria-hidden="true"></div>
+      <h2 class="studded">Let's build something</h2>
+      <p>
+        I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
+        platforms, pipelines, or whatever you're building.
+      </p>
+      <div class="actions">
+        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+      </div>
+      <p class="hand">Thanks for stopping by.</p>
+      <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+    </footer>
+  </body>
+</html>

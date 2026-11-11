@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Gardening · Alexander Fielding</title>
+    <meta
+      name="description"
+      content="Alexander Fielding's garden in San Luis Obispo County: raised beds, tomatoes from seed, young fruit trees, and what the gophers got."
+    />
+    <meta property="og:title" content="Gardening · Alexander Fielding" />
+    <meta property="og:description" content="Alexander Fielding's garden in San Luis Obispo County: raised beds, tomatoes from seed, young fruit trees, and what the gophers got." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://fielding.cloud/intro/hero-wide.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" href="/intro/title-gardening.webp" as="image" type="image/webp" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <nav aria-label="Site">
+        <a href="/#about">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/experience/">Experience</a>
+        <a href="/hobbies/" aria-current="true">Hobbies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <h1 class="visually-hidden">Gardening</h1>
+      <div class="title-art" style="--still: url('/intro/title-gardening.webp')" aria-hidden="true">
+        <video muted playsinline preload="none" tabindex="-1">
+          <source src="/intro/title-gardening.webm" type="video/webm" />
+          <source src="/intro/title-gardening.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <script>
+        // Plays the title being built. Without this, or if the video can't play, the finished
+        // word (the still behind the video) is what shows.
+        (() => {
+          const art = document.currentScript.previousElementSibling;
+          const video = art.querySelector("video");
+          if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          try {
+            const seen = "title-seen:" + location.pathname;
+            if (sessionStorage.getItem(seen)) return;
+            sessionStorage.setItem(seen, "1");
+          } catch {}
+          const fail = () => delete art.dataset.state;
+          art.dataset.state = "play"; // hides the still so the finished word doesn't flash first
+          video.lastElementChild.addEventListener("error", fail);
+          video.play().catch(fail);
+        })();
+      </script>
+      <p class="byline">Alec Fielding · Platform engineer</p>
+
+      <section class="section prose">
+        <nav class="crumb" aria-label="Breadcrumb"><a href="/hobbies/">Hobbies</a> <span aria-hidden="true">/</span> Gardening</nav>
+        <h2 class="studded" style="--brick: var(--green)">The garden</h2>
+        <p>
+          I started gardening seriously in 2025, on about a third of an acre in San Luis Obispo
+          County, in USDA Zone 9a. I follow permaculture ideas and I'm working toward growing most of
+          our vegetables and fruit. I start nearly everything from seed, because it's cheaper.
+        </p>
+        <p>
+          Four metal raised beds on drip irrigation hold herbs, peppers and squash. This year 26
+          tomato plants went in the ground on a Florida weave trellis, all started from seed, next to
+          tomatillos and potatoes. Peaches, a nectarine and a cherry are in the ground. Citrus and
+          avocados are in fabric grow bags, and a rock garden of native plants is there for the pollinators.
+        </p>
+        <figure class="tomatoes">
+          <h3>This year's 26 tomato plants</h3>
+          <ul>
+            <li><span>San Marzano</span><i class="tom tom-red" style="--n: 5" role="img" aria-label="5 plants"></i></li>
+            <li><span>Beefsteak</span><i class="tom tom-red" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Big Brandy</span><i class="tom tom-red" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Ox Heart</span><i class="tom tom-red" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Gardener's Delight</span><i class="tom tom-red" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Red Pear</span><i class="tom tom-red" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Sun Gold</span><i class="tom tom-orange" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Yellow Pear</span><i class="tom tom-gold" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Green Zebra</span><i class="tom tom-green" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Cherokee Carbon</span><i class="tom tom-dark" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>Black Krim</span><i class="tom tom-dark" style="--n: 2" role="img" aria-label="2 plants"></i></li>
+            <li><span>One I forgot to label</span><i class="tom tom-none" style="--n: 1" role="img" aria-label="1 plant"></i></li>
+          </ul>
+          <figcaption>One dot for each plant, in the colour its fruit ripens to.</figcaption>
+        </figure>
+        <p>
+          Not all of it works. In 2026 gophers took the pole beans twice, and poor germination and
+          squirrels finished off the Three Sisters bed.
+        </p>
+        <p class="score" role="img" aria-label="Score for 2026: gophers 2, Alec 0">
+          <span>Gophers <b>2</b></span>
+          <span>Alec <b>0</b></span>
+        </p>
+        <p class="hand">Rematch in the spring.</p>
+        <p>
+          I keep the garden's records in Notion and plan with Claude. We work from which bed is free
+          and when, the local frost dates, and what to sow next. The peppers end up as fermented hot
+          sauce and the basil as pesto.
+        </p>
+        <ul class="photos photos-5" style="--brick: var(--green)">
+          <li>
+            <figure>
+              <img src="/hobbies/garden-seed-starts.webp" alt="Trays of seedlings under grow lights" width="1000" height="750" loading="lazy" />
+              <figcaption>Seed starts under grow lights</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-cabbage.webp" alt="A cabbage heading up in a raised bed" width="750" height="1000" loading="lazy" />
+              <figcaption>Cabbage in a raised bed</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-broccoli.webp" alt="A large head of broccoli on a cutting board" width="750" height="1000" loading="lazy" />
+              <figcaption>Broccoli</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-greens.webp" alt="Alec holding a bowl of fresh-picked greens" width="750" height="1000" loading="lazy" />
+              <figcaption>Greens for dinner</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-harvest.webp" alt="Alec holding a bunch of chard and a beet" width="750" height="1000" loading="lazy" />
+              <figcaption>Harvest day</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-blossom.webp" alt="A young fruit tree covered in pink blossom" width="750" height="1000" loading="lazy" />
+              <figcaption>A fruit tree in bloom</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-young-tree.webp" alt="A young fruit tree in leaf on a grassy slope" width="750" height="1000" loading="lazy" />
+              <figcaption>A fruit tree in its second year</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-citrus.webp" alt="Citrus trees growing in fabric bags on a patio" width="1000" height="750" loading="lazy" />
+              <figcaption>Citrus in grow bags</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-zinnias.webp" alt="Orange, red and pink zinnias in bloom" width="750" height="1000" loading="lazy" />
+              <figcaption>Zinnias</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/garden-sunflower.webp" alt="A sunflower in dry grass" width="750" height="1000" loading="lazy" />
+              <figcaption>A sunflower</figcaption>
+            </figure>
+          </li>
+        </ul>
+      </section>
+      <section class="section">
+        <div class="actions">
+          <a class="brick brick-ghost" href="/hobbies/">All hobbies</a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="course" aria-hidden="true"></div>
+      <h2 class="studded">Let's build something</h2>
+      <p>
+        I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
+        platforms, pipelines, or whatever you're building.
+      </p>
+      <div class="actions">
+        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+      </div>
+      <p class="hand">Thanks for stopping by.</p>
+      <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+    </footer>
+  </body>
+</html>

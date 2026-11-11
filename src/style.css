@@ -1,0 +1,1858 @@
+:root {
+  --bg: #12100d;
+  --surface: #1d1915;
+  --line: #322c25;
+  --text: #f3ecdf;
+  --muted: #b3a898;
+  --soft: #d6cdbf; /* running text */
+  --paper: #f4ecdb;
+  --pen: #2a241c; /* handwriting on paper */
+  --red: #c91a09;
+  --blue: #1a6ad0;
+  --yellow: #f2cd37;
+  --green: #237841;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav-h: 3.75rem; /* the fixed nav; the jump bar sticks just below it */
+  --display: "Archivo Black", "Arial Black", sans-serif;
+  --hand: Caveat, "Bradley Hand", cursive;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+  /* Keeps the page the same width with and without a scrollbar, so the intro video and the
+     hero image behind it line up exactly. */
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--line) var(--bg);
+}
+
+html[data-intro="play"] {
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--yellow);
+  color: #17140a;
+}
+
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+body {
+  margin: 0;
+  /* A baseplate: faint studs across the whole page. */
+  background: radial-gradient(circle, rgb(255 244 224 / 0.04) 0 4.5px, transparent 5.5px) 0 0 / 26px 26px var(--bg);
+  color: var(--text);
+  font: 400 1.0625rem/1.65 Archivo, system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0 0 0.6em;
+}
+
+/* ---------- Intro ---------- */
+
+/* The rendered scene, placed identically in the intro dialog and the hero so one fades into the
+   other without a jump. Wide cut: fitted to the width and centred when it is taller than the
+   screen. vw, not a container unit: the hero has padding and the dialog has none. */
+.art {
+  position: absolute;
+  left: 0;
+  top: min(0px, calc((100svh - 56.25vw) / 2));
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  mask-image: linear-gradient(#000 72%, transparent);
+}
+
+.intro {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: #030405;
+  container-type: inline-size;
+  /* Fades out when closed; allow-discrete keeps it rendered until the fade ends. */
+  transition:
+    opacity 0.5s ease,
+    display 0.5s allow-discrete,
+    overlay 0.5s allow-discrete;
+}
+
+.intro:not([open]) {
+  opacity: 0;
+}
+
+.intro::backdrop {
+  background: none;
+}
+
+.intro-video {
+  object-fit: cover;
+  /* The first frame, shown until the video has data. */
+  background: url("/intro/poster-wide.webp") center / 100% 100% no-repeat;
+}
+
+.intro-skip {
+  position: absolute;
+  right: max(1.5rem, env(safe-area-inset-right));
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  min-height: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid rgb(255 255 255 / 0.6);
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.45);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.intro-skip:hover {
+  border-color: var(--text);
+}
+
+/* ---------- Nav ---------- */
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: var(--nav-h);
+  padding: 0 clamp(1rem, 4vw, 3rem);
+  /* Solid, so the page never shows through the links as it scrolls under them. */
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  font-family: var(--display);
+  text-decoration: none;
+}
+
+/* A 1x2 brick: the way home, and the only part of the brand a phone has room for. */
+.nav-brick,
+.timeline > li::before {
+  --c: var(--brick, var(--red));
+  flex: none;
+  width: 1.5rem;
+  height: 1.15rem;
+  background:
+    linear-gradient(var(--c) 0 0) bottom / 100% 74% no-repeat,
+    linear-gradient(90deg, transparent 12%, var(--c) 12% 40%, transparent 40% 60%, var(--c) 60% 88%, transparent 88%) top / 100% 26%
+      no-repeat;
+}
+
+/* The skip link lands here; the whole page doesn't need a ring. */
+main:focus {
+  outline: none;
+}
+
+.skip {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 20;
+  padding: 0.6rem 1rem;
+  border-radius: 3px;
+  background: var(--yellow);
+  color: #17140a;
+  font-weight: 700;
+}
+
+.skip:focus {
+  top: 0.5rem;
+}
+
+.nav nav {
+  display: flex;
+  gap: clamp(0.7rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nav nav a {
+  padding: 0.75rem 0; /* a taller target than the text */
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.nav nav a:hover {
+  color: var(--text);
+}
+
+/* The current page, or the section a page belongs to. */
+.nav nav a[aria-current] {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.45em;
+}
+
+/* ---------- Page title (Projects, Experience) ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A rendered clip of the title being built. The still of the finished word sits behind the
+   video and is what shows with reduced motion, without scripts, or if the video fails. */
+.title-art {
+  position: relative;
+  max-width: 100rem;
+  margin: 4.5rem auto 0;
+  aspect-ratio: 4 / 1;
+  background: var(--still) center / 100% 100% no-repeat;
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
+    linear-gradient(transparent, #000 18%, #000 80%, transparent);
+  mask-composite: intersect;
+}
+
+.title-art[data-state="play"] {
+  background-image: none;
+}
+
+.title-art video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.title-art:not([data-state="play"]) video {
+  display: none;
+}
+
+.title-art + script + .byline + .section {
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: calc(100svh - 6.5rem);
+  padding: 6rem clamp(1rem, 6vw, 6rem) 4rem;
+  overflow: hidden;
+  background: #030405;
+  container-type: inline-size;
+  isolation: isolate;
+}
+
+.hero-art {
+  z-index: -1;
+  background: url("/intro/hero-wide.webp") center / 100% 100% no-repeat;
+}
+
+/* Blends the hero's floor into the page below. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -1;
+  height: 8rem;
+  background: linear-gradient(0deg, var(--bg), transparent);
+}
+
+.hero-copy {
+  /* The pipeline starts 46% across the wide cut; the copy stays left of it at every width. */
+  max-width: min(38rem, 36cqw);
+}
+
+/* The copy drops in as the last brick lands. */
+.hero-copy,
+.hero-note {
+  transition:
+    opacity 0.5s var(--ease-out),
+    transform 0.6s var(--ease-out);
+}
+
+[data-intro="play"] .hero-copy,
+[data-intro="play"] .hero-note {
+  opacity: 0;
+  transform: translateY(-0.75rem);
+  transition: none;
+}
+
+.hero h1 {
+  font-size: clamp(1.75rem, 3.9cqw, 4.75rem);
+  text-wrap: balance;
+}
+
+.hero h1 span {
+  color: var(--yellow);
+}
+
+.hero-lede {
+  color: var(--soft);
+  font-size: clamp(1rem, 1.3cqw, 1.15rem);
+  text-wrap: pretty;
+}
+
+.hero-note {
+  position: absolute;
+  right: clamp(1rem, 6vw, 6rem);
+  bottom: 2.5rem;
+  max-width: 21rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.replay {
+  display: inline-block;
+  margin-block: -0.6rem; /* a tall target that doesn't push its line apart */
+  padding: 0.6rem 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+
+.replay:hover {
+  color: var(--yellow);
+}
+
+/* Tall cut for portrait screens: the pipeline sits above the copy. Its lowest label ends 66%
+   of the screen width down the image, so the copy starts below that. */
+@media (max-aspect-ratio: 4/5) {
+  .art {
+    top: 0;
+    aspect-ratio: 9 / 16;
+    mask-image: none;
+  }
+
+  .intro-video {
+    background-image: url("/intro/poster-tall.webp");
+  }
+
+  .hero {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 2rem;
+    min-height: 100svh;
+    padding-top: 72vw;
+    padding-bottom: 3rem;
+  }
+
+  .hero-art {
+    background-image: url("/intro/hero-tall.webp");
+  }
+
+  .hero-copy {
+    max-width: 34rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 9cqw, 3.5rem);
+  }
+
+  .hero-lede {
+    font-size: 1.0625rem;
+  }
+
+  .hero-note {
+    position: static;
+    max-width: 34rem;
+    text-align: left;
+  }
+}
+
+/* ---------- Bricks ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 1rem;
+  margin-top: 2rem;
+}
+
+/* A brick seen side on: a body with square studs along the top edge. */
+.brick {
+  --c: var(--red);
+  --ink: #fff;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.3rem;
+  border-radius: 3px;
+  background: var(--c);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.28);
+  transition: transform 0.15s ease;
+}
+
+.brick::before {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  top: -6px;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, var(--c) 0 14px, transparent 14px 26px);
+}
+
+.brick:hover {
+  transform: translateY(-3px);
+}
+
+.brick:active {
+  transform: translateY(1px);
+}
+
+.brick-yellow {
+  --c: var(--yellow);
+  --ink: #17140a;
+}
+
+.brick-ghost {
+  --c: #7d7164;
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--c);
+  color: var(--text);
+}
+
+/* ---------- Sections ---------- */
+
+.section {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: clamp(2.75rem, 6vw, 4.25rem) clamp(1rem, 4vw, 2rem);
+}
+
+.studded {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+/* Small 1x2 brick in front of each section title. */
+.studded::before {
+  --c: var(--brick, var(--red));
+  content: "";
+  display: inline-block;
+  width: 1.05em;
+  height: 0.8em;
+  margin-right: 0.45em;
+  vertical-align: -0.02em;
+  background:
+    linear-gradient(var(--c) 0 0) bottom / 100% 74% no-repeat,
+    linear-gradient(
+        90deg,
+        transparent 0.12em,
+        var(--c) 0.12em 0.4em,
+        transparent 0.4em 0.65em,
+        var(--c) 0.65em 0.93em,
+        transparent 0.93em
+      )
+      top / 100% 26% no-repeat;
+}
+
+/* Group headings inside one section, as on Projects. */
+.cards + .studded {
+  margin-top: clamp(3rem, 7vw, 4.5rem);
+}
+
+#toolbox .studded::before {
+  --c: var(--green);
+}
+
+.about > h2 {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.about {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.about p {
+  color: var(--soft);
+  max-width: 42rem;
+}
+
+.portrait {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 6px var(--surface),
+    0 0 0 8px var(--blue);
+}
+
+/* ---------- Cards ---------- */
+
+.cards {
+  --brick: var(--red); /* a group sets one colour for its cards */
+  display: grid;
+  align-items: start;
+  /* Two columns at full width, so a Card's paragraph keeps a readable line length. */
+  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 100%), 1fr));
+  gap: 1.75rem 1.25rem;
+}
+
+.card {
+  position: relative;
+  padding: 1.5rem 1.4rem 1.25rem;
+  border-radius: 4px;
+  background: var(--surface);
+  border-top: 8px solid var(--brick);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: -14px;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, var(--brick) 0 18px, transparent 18px 34px);
+}
+
+.card h2,
+.card h3 {
+  font-size: 1.2rem;
+}
+
+/* A photo across the top of a card, edge to edge. */
+.card > img {
+  display: block;
+  width: calc(100% + 2.8rem);
+  max-width: none;
+  height: auto;
+  margin: -1.5rem -1.4rem 1.25rem;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.card h2 a,
+.card h3 a {
+  text-decoration-color: var(--brick);
+  text-underline-offset: 0.2em;
+}
+
+.card p {
+  max-width: 44rem;
+  margin: 0 0 0.75rem;
+  color: var(--soft);
+  font-size: 0.98rem;
+}
+
+/* The result first, before the paragraph that explains it. */
+.card .stat {
+  color: var(--yellow);
+  font: 400 1.05rem/1.3 var(--display);
+  text-wrap: balance;
+}
+
+.card .tags {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---------- Hobbies ---------- */
+
+.prose > p {
+  max-width: 42rem;
+  color: var(--soft);
+}
+
+.prose > .cards {
+  margin-top: 2.5rem;
+}
+
+.photos {
+  list-style: none;
+  margin: 3rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(13rem, 44%), 1fr));
+  gap: 2.25rem 1.25rem;
+}
+
+/* Prints taped into a scrapbook: a paper border, a strip of tape, a handwritten caption. */
+.photos figure {
+  position: relative;
+  margin: 0;
+  padding: 0.5rem 0.5rem 0.3rem;
+  border-radius: 2px;
+  background: var(--paper);
+  box-shadow: 0 12px 20px -10px rgb(0 0 0 / 0.75);
+  rotate: -1.2deg;
+  transition: rotate 0.35s var(--ease-out);
+}
+
+.photos li:nth-child(even) figure {
+  rotate: 1deg;
+}
+
+.photos li:nth-child(3n) figure {
+  rotate: -0.4deg;
+}
+
+.photos figure:hover {
+  rotate: 0deg;
+}
+
+.photos figure::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -0.6rem;
+  width: 4rem;
+  height: 1.2rem;
+  translate: -50% 0;
+  rotate: -2deg;
+  background: rgb(242 205 55 / 0.6);
+}
+
+.photos img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--surface);
+}
+
+.photos figcaption {
+  padding: 0.4rem 0.2rem 0.15rem;
+  color: var(--pen);
+  font: 700 1.3rem/1.1 var(--hand);
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* ---------- Experience ---------- */
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2.5rem;
+}
+
+.timeline > li {
+  --brick: var(--blue);
+  position: relative;
+  max-width: 46rem;
+  padding-left: 2.75rem;
+}
+
+.timeline > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+}
+
+.timeline > li::after {
+  content: "";
+  position: absolute;
+  left: calc(0.75rem - 1px);
+  top: 1.6rem;
+  bottom: -2.2rem;
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline > li:last-child::after {
+  display: none;
+}
+
+.timeline h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.2em;
+}
+
+.timeline h3 span {
+  display: block;
+  margin-top: 0.3em;
+  font-family: Archivo, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.when {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.timeline ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--soft);
+}
+
+/* ---------- Toolbox ---------- */
+
+.toolbox {
+  align-items: start;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 2rem;
+}
+
+.toolbox h3 {
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.toolbox p {
+  margin: 0 0 0.75rem;
+  color: var(--soft);
+}
+
+.toolbox cite {
+  color: var(--text);
+}
+
+.chips {
+  --brick: var(--blue);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 0.5rem;
+}
+
+/* Yellow bricks take dark ink, like the yellow button. */
+.chips-yellow {
+  --brick: var(--yellow);
+  --ink: #17140a;
+}
+
+.chips li {
+  position: relative;
+  padding: 0.3rem 0.75rem;
+  border-radius: 2px;
+  background: var(--brick);
+  color: var(--ink, #fff);
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.25);
+}
+
+.chips li::before {
+  content: "";
+  position: absolute;
+  left: 0.45rem;
+  right: 0.45rem;
+  top: -4px;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--brick) 0 9px, transparent 9px 16px);
+}
+
+/* The full list on Experience is text, so 83 tools read as a list and not as a wall of buttons. */
+.toolbox-full {
+  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 100%), 1fr));
+  gap: 2rem 3rem;
+}
+
+.toolbox-full h3::before {
+  content: "";
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.5em;
+  border-radius: 2px;
+  background: var(--brick);
+}
+
+.parts-note {
+  max-width: 42rem;
+  margin: 0 0 2rem;
+  color: var(--soft);
+}
+
+.parts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--soft);
+  font-size: 0.98rem;
+}
+
+.parts li {
+  display: inline;
+}
+
+.parts li:not(:last-child)::after {
+  content: "  ·  ";
+  color: var(--muted);
+  white-space: pre-wrap;
+}
+
+/* ---------- Figures ---------- */
+
+/* Counts are drawn with studs: one stud, one thing. Labels stay in text colours. */
+.fig,
+.years,
+.tomatoes {
+  margin: 0;
+}
+
+.fig figcaption,
+.years figcaption,
+.tomatoes figcaption {
+  max-width: 30rem;
+  margin-top: 0.9rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.card-wide {
+  grid-column: 1 / -1;
+}
+
+.card-fig {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 1.5rem 3rem;
+  align-items: center;
+}
+
+.card-fig .fig {
+  container-type: inline-size;
+}
+
+/* 80 studs, 20 to a row. */
+.units {
+  --u: min(16px, 5cqw);
+  width: calc(20 * var(--u));
+  height: calc(4 * var(--u));
+  background: radial-gradient(circle, #3d8bef 0 calc(var(--u) * 0.34), transparent calc(var(--u) * 0.38)) 0 0 / var(--u)
+    var(--u);
+}
+
+.blk {
+  --c: var(--brick);
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: min(5.5rem, 28cqw);
+  padding: 0.35rem 0.6rem;
+  border-radius: 3px;
+  background: var(--c);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.28);
+}
+
+.blk::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  top: -5px;
+  height: 5px;
+  background: repeating-linear-gradient(90deg, var(--c) 0 12px, transparent 12px 22px);
+}
+
+.blk-grey {
+  --c: #7a6f63;
+}
+
+.blk-big {
+  min-width: min(7.5rem, 36cqw);
+  padding-block: 2.1rem;
+  font-size: 1rem;
+}
+
+.blk-yellow {
+  --c: var(--yellow);
+  color: #17140a;
+}
+
+/* Three bricks stacked in the order they happen. */
+.flow {
+  list-style: none;
+  width: min(100%, 15rem);
+  margin: 0;
+  padding: 5px 0 0;
+  display: grid;
+  gap: 0.75rem;
+  counter-reset: step;
+}
+
+.flow .blk {
+  display: flex;
+  justify-content: start;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.95rem;
+  counter-increment: step;
+}
+
+.flow .blk::after {
+  content: counter(step);
+  order: -1;
+  margin-right: 0.7rem;
+  font-family: var(--display);
+  font-weight: 400;
+}
+
+.merge {
+  display: flex;
+  align-items: center;
+  gap: min(1.1rem, 4cqw);
+  padding-top: 5px;
+}
+
+.merge-from {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.merge-arrow {
+  flex: none;
+  width: 2rem;
+  height: 1.4rem;
+  background: var(--muted);
+  clip-path: polygon(0 35%, 55% 35%, 55% 0, 100% 50%, 55% 100%, 55% 65%, 0 65%);
+}
+
+/* One stud is one minute; the longest bar is 14. */
+.bars p {
+  margin: 0 0 0.3rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.bars b {
+  color: var(--text);
+}
+
+.bar {
+  --u: calc(100cqw / 14);
+  height: 22px;
+  margin-bottom: 1.1rem;
+  border-radius: 0 4px 4px 0;
+  background-size: var(--u) 100%;
+}
+
+.bar-before {
+  width: calc(14 * var(--u));
+  background:
+    radial-gradient(circle, rgb(0 0 0 / 0.5) 0 4px, transparent 4.5px) 0 0 / var(--u) 100%,
+    linear-gradient(90deg, #a3978a 0 78.57%, rgb(163 151 138 / 0.72) 78.57%);
+}
+
+.bar-after {
+  width: calc(3.4 * var(--u));
+  background:
+    radial-gradient(circle, rgb(0 0 0 / 0.5) 0 4px, transparent 4.5px) 0 0 / var(--u) 100%,
+    var(--yellow);
+}
+
+/* 661 studs, 40 to a row. */
+.waffle {
+  --u: min(8px, 2.5cqw);
+  width: calc(40 * var(--u));
+}
+
+.waffle div:not(.waffle-row) {
+  --dot: #8f8477;
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  background: radial-gradient(circle, var(--dot) 0 calc(var(--u) * 0.36), transparent calc(var(--u) * 0.4)) 0 0 / var(--u)
+    var(--u);
+}
+
+.waffle div.mine {
+  --dot: var(--yellow);
+}
+
+.waffle-row {
+  display: flex;
+}
+
+.key {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--soft);
+}
+
+.key::before {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  margin-right: 0.5em;
+  border-radius: 50%;
+  background: #8f8477;
+}
+
+.key-mine::before {
+  background: var(--yellow);
+}
+
+/* Jobs on one line of years. --from and --to are months counted from January 2018, out of 108. */
+.years {
+  max-width: 46rem;
+  margin: 1.5rem 0 3rem;
+}
+
+.years-plot {
+  background: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px calc(100% / 9));
+}
+
+.years-plot p {
+  margin: 0;
+  padding: 0.55rem 0 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.years-plot p::before {
+  content: "";
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.5em;
+  border-radius: 2px;
+  background: var(--brick);
+}
+
+.years-plot span {
+  margin-left: 0.4rem;
+  color: var(--muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.years-plot div {
+  height: 18px;
+  margin-left: calc(var(--from) / 108 * 100%);
+  width: calc((var(--to) - var(--from)) / 108 * 100%);
+  border-radius: 2px;
+  background: var(--brick);
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.28);
+}
+
+.years-axis {
+  display: grid;
+  grid-template-columns: repeat(4, 2fr) 1fr;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.years-axis span {
+  padding: 0.3rem 0 0 0.3rem;
+}
+
+/* A row of tomatoes for each variety. */
+.tomatoes {
+  max-width: 44rem;
+  margin: 2rem 0 2.25rem;
+  padding: 1.4rem 1.4rem 1.2rem;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.tomatoes h3 {
+  margin-bottom: 1rem;
+  font-size: 1.15rem;
+}
+
+.tomatoes ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 2 16rem;
+  column-gap: 2.5rem;
+  font-size: 0.95rem;
+}
+
+.tomatoes li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  break-inside: avoid;
+  color: var(--soft);
+}
+
+.tom {
+  --dot: #d6402b;
+  flex: none;
+  width: calc(var(--n) * 20px);
+  height: 18px;
+  background: radial-gradient(circle, var(--dot) 0 8px, transparent 8.6px) 0 0 / 20px 18px;
+}
+
+.tom-orange {
+  --dot: #f08a24;
+}
+
+.tom-gold {
+  --dot: var(--yellow);
+}
+
+.tom-green {
+  --dot: #7fb539;
+}
+
+.tom-dark {
+  --dot: #a35d8f;
+}
+
+.tom-none {
+  --dot: #857a6d;
+}
+
+@media (max-width: 760px) {
+  .card-fig {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .years-plot span {
+    display: block;
+    margin-left: 0;
+  }
+}
+
+/* Photo counts that divide evenly, so a set never ends on a row of two. */
+@media (min-width: 900px) {
+  .photos-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .photos-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* ---------- Workshop notes ---------- */
+
+/* Tilted signs and prints may poke past the edge of a phone; they never widen the page. */
+main {
+  overflow-x: clip;
+}
+
+/* A hand-painted sign taped to the wall. */
+p.sign {
+  position: relative;
+  width: fit-content;
+  max-width: 15rem;
+  margin: 2rem 0 0.5rem;
+  padding: 1rem 1.2rem 0.9rem;
+  background: var(--yellow);
+  color: #0a3c8a;
+  font: 400 1.35rem/1.08 var(--display);
+  text-align: center;
+  text-transform: uppercase;
+  text-wrap: balance;
+  rotate: -3deg;
+  box-shadow: 0 12px 20px -10px rgb(0 0 0 / 0.75);
+}
+
+.sign::before,
+.sign::after {
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  width: 3rem;
+  height: 1.1rem;
+  background: rgb(244 236 219 / 0.75);
+}
+
+.sign::before {
+  left: -1rem;
+  rotate: -38deg;
+}
+
+.sign::after {
+  right: -1rem;
+  rotate: 38deg;
+}
+
+.about-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.about-side .sign {
+  margin: 0.5rem 0 0;
+}
+
+/* A note in the margin, in the same hand as the photo captions. */
+p.aside {
+  width: fit-content;
+  margin: 0.25rem 0 1rem;
+  color: var(--yellow);
+  font: 700 1.4rem/1.15 var(--hand);
+  rotate: -1.5deg;
+}
+
+/* Results as four big bricks; each one opens its project. */
+.results {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(9.75rem, 100%), 1fr));
+  gap: 1.5rem 1rem;
+}
+
+.results li {
+  --brick: var(--red);
+  --on: #fff;
+  position: relative;
+  border-radius: 4px;
+  background: var(--brick);
+  box-shadow: inset 0 -6px 0 rgb(0 0 0 / 0.28);
+  transition: translate 0.2s var(--ease-out);
+}
+
+.results li.results-yellow {
+  --brick: var(--yellow);
+  --on: #17140a;
+}
+
+.results li::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: -8px;
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--brick) 0 22px, transparent 22px 40px);
+}
+
+.results li:hover {
+  translate: 0 -4px;
+}
+
+.results a {
+  display: block;
+  height: 100%;
+  padding: 1.1rem 1.2rem 2.25rem;
+  color: var(--on);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.results b {
+  display: block;
+  margin-bottom: 0.2rem;
+  font: 400 clamp(1.9rem, 5vw, 2.5rem) / 1.1 var(--display);
+}
+
+/* A corner arrow says the brick goes somewhere, for visitors who can't hover. */
+.results a::after {
+  content: "";
+  position: absolute;
+  right: 0.9rem;
+  bottom: 1rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--on);
+  clip-path: polygon(20% 0, 100% 0, 100% 80%, 80% 80%, 80% 34%, 14% 100%, 0 86%, 66% 20%, 20% 20%);
+}
+
+#toolbox .aside {
+  margin-top: 1.75rem;
+}
+
+.card p.aside {
+  color: var(--paper);
+}
+
+.hand {
+  margin: 0.25rem 0 0;
+  color: var(--yellow);
+  font: 700 1.7rem/1.2 var(--hand);
+}
+
+.score {
+  display: flex;
+  width: fit-content;
+  gap: 0.4rem;
+  margin: 1.75rem 0 0.5rem;
+  font-family: var(--display);
+}
+
+.score span {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.55rem 1rem;
+  border-radius: 3px;
+  background: var(--surface);
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.3);
+}
+
+.score b {
+  color: var(--yellow);
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+
+/* Stays under the nav for the length of the page, so any part is one tap away. */
+.jump {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 5;
+  display: flex;
+  gap: 0 1.5rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0 max(clamp(1rem, 4vw, 2rem), calc(50% - 32rem));
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+html:has(.jump) {
+  scroll-padding-top: 7.5rem;
+}
+
+.jump a[aria-current] {
+  color: var(--yellow);
+  text-decoration-thickness: 3px;
+}
+
+.jump a {
+  padding: 0.7rem 0;
+  color: var(--text);
+  text-decoration-color: var(--yellow);
+  text-underline-offset: 0.25em;
+}
+
+.crumb {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.crumb a {
+  display: inline-block;
+  padding: 0.7rem 0;
+  color: var(--text);
+  text-decoration-color: var(--yellow);
+  text-underline-offset: 0.25em;
+}
+
+.card p a {
+  color: var(--text);
+  text-decoration-color: var(--brick);
+  text-underline-offset: 0.2em;
+}
+
+/* Who the page belongs to, where the nav has no room for the name. */
+.byline {
+  display: none;
+  margin: 0.4rem 1rem 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .byline {
+    display: block;
+  }
+}
+
+/* The card or job a link pointed at. */
+.timeline > li:target {
+  outline: 2px solid var(--yellow);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+
+.card:target {
+  outline: 2px solid var(--yellow);
+  outline-offset: 4px;
+}
+
+.card h3 a {
+  display: inline-block;
+  margin-block: -0.75rem;
+  padding-block: 0.75rem; /* a taller target than the text */
+  text-decoration: none;
+}
+
+/* A mark that says the title is a link to this card. */
+.card h3 a::after {
+  content: " #";
+  color: var(--muted);
+  opacity: 0;
+}
+
+.card:hover h3 a::after,
+.card h3 a:focus-visible::after {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .card h3 a::after {
+    opacity: 1;
+  }
+}
+
+.tags a {
+  display: inline-block;
+  margin-block: -0.6rem;
+  padding-block: 0.6rem;
+  color: inherit;
+  text-decoration-color: var(--brick);
+  text-underline-offset: 0.2em;
+}
+
+.parts-note a {
+  color: var(--text);
+  text-decoration-color: var(--yellow);
+  text-underline-offset: 0.2em;
+}
+
+.card h3 a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--brick);
+}
+
+.timeline > li:nth-child(-n + 2) > ul > li:nth-child(-n + 2) {
+  color: var(--text);
+}
+
+/* Wide screens: the jobs on the left, the years beside them and staying in view. */
+@media (min-width: 1100px) {
+  #work {
+    display: grid;
+    grid-template-columns: minmax(0, 46rem) minmax(15rem, 1fr);
+    column-gap: 3.5rem;
+    align-items: start;
+  }
+
+  #work > :not(.timeline, .years) {
+    grid-column: 1 / -1;
+  }
+
+  #work > .timeline {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  #work > .years {
+    grid-column: 2;
+    grid-row: 3;
+    position: sticky;
+    top: 8.5rem;
+    margin: 0;
+  }
+
+  #work .years-plot span {
+    display: block;
+    margin-left: 0;
+  }
+}
+
+.timeline a {
+  color: var(--text);
+  text-decoration-color: var(--brick);
+  text-underline-offset: 0.2em;
+}
+
+/* A card that is one big link. */
+.card-go {
+  transition: translate 0.2s var(--ease-out);
+}
+
+.card-go:hover {
+  translate: 0 -4px;
+}
+
+.card-go h2 a:focus-visible {
+  outline: none;
+}
+
+.card-go:focus-within {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.card-go h2 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.card-go::after {
+  content: "";
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--muted);
+  clip-path: polygon(20% 0, 100% 0, 100% 80%, 80% 80%, 80% 34%, 14% 100%, 0 86%, 66% 20%, 20% 20%);
+}
+
+.card-go > img {
+  transition: scale 0.5s var(--ease-out);
+}
+
+/* An odd card out takes the whole row, so a group never ends on an empty cell. */
+.cards > .card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.lost {
+  padding-top: 9rem;
+  min-height: 60svh;
+}
+
+.lost p {
+  max-width: 42rem;
+  color: var(--soft);
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  margin-top: 3rem;
+  padding: 0 clamp(1rem, 4vw, 2rem) 4rem;
+  background: var(--bg);
+  text-align: center;
+}
+
+.site-footer > :not(.course) {
+  max-width: 68rem;
+  margin-inline: auto;
+}
+
+.site-footer .studded {
+  margin-top: 0;
+}
+
+.site-footer p {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--soft);
+}
+
+.site-footer .actions {
+  justify-content: center;
+  margin-bottom: 3.5rem;
+}
+
+.site-footer .hand {
+  color: var(--yellow);
+}
+
+.site-footer .fine {
+  margin: 0.25rem auto 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.site-footer a:not(.brick) {
+  color: var(--text);
+  text-decoration-color: var(--yellow);
+  text-underline-offset: 0.25em;
+}
+
+/* The ground the page stands on: one course of bricks, edge to edge. */
+.course {
+  position: relative;
+  height: 1.15rem;
+  margin: 0 calc(-1 * clamp(1rem, 4vw, 2rem)) 4rem;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--red) 0 78px,
+    var(--yellow) 78px 130px,
+    var(--blue) 130px 234px,
+    var(--green) 234px 286px
+  );
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.28);
+}
+
+.course::before {
+  content: "";
+  position: absolute;
+  inset: -6px 0 auto;
+  height: 6px;
+  background: inherit;
+  box-shadow: none;
+  mask-image: repeating-linear-gradient(90deg, transparent 0 6px, #000 6px 20px, transparent 20px 26px);
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 720px) {
+  .nav-name {
+    display: none;
+  }
+
+  .nav-brand {
+    min-width: 2.75rem;
+    justify-content: center;
+  }
+
+  .nav nav {
+    font-size: 0.875rem;
+  }
+
+  .about-side {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .about {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait {
+    width: 9rem;
+  }
+}
+
+/* Narrow phones: the brick is the way home, so About gives up its place, and the rest tighten. */
+@media (max-width: 400px) {
+  .nav {
+    padding-inline: 0.75rem;
+  }
+
+  .nav nav {
+    gap: 0.6rem;
+    font-size: 0.8125rem;
+  }
+
+  .nav nav a[href$="#about"] {
+    display: none;
+  }
+
+
+  .about-side {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* On paper: dark ink on white, no fixed nav, no title art, and the contact details as plain text, so
+   the pages can stand in for a resume. Figures keep their colours, since the colour is the data. */
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  .nav {
+    position: static;
+    border: 0;
+    background: none;
+  }
+
+  .nav nav,
+  .title-art,
+  .hero-art,
+  .hero::after,
+  .hero-note,
+  .jump,
+  .course,
+  .skip,
+  .byline,
+  .hero .actions,
+  #toolbox .actions,
+  .lost .actions,
+  main > .section > .actions,
+  .card > img,
+  .brick::before {
+    display: none;
+  }
+
+  .hero {
+    min-height: 0;
+    padding: 1rem 0;
+    background: none;
+  }
+
+  .hero-copy {
+    max-width: none;
+  }
+
+  .visually-hidden {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+  }
+
+  .section,
+  .site-footer {
+    padding-block: 1rem;
+    background: none;
+  }
+
+  .cards {
+    gap: 0.75rem;
+  }
+
+  .card-fig {
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1rem;
+  }
+
+  .card,
+  .tomatoes,
+  .score span {
+    border: 1px solid #999;
+    background: #fff;
+    break-inside: avoid;
+  }
+
+  .card::before {
+    display: none;
+  }
+
+  .studded {
+    break-after: avoid;
+  }
+
+  .timeline > li,
+  .photos li,
+  .toolbox > div,
+  .about-side,
+  .years {
+    break-inside: avoid;
+  }
+
+  :is(.units, .waffle div, .bar, .tom, .years-plot div, .merge-arrow, .blk, .chips li, .results li, .sign, .nav-brick, .timeline > li),
+  .years-plot p::before,
+  .key::before,
+  .blk::before,
+  .chips li::before,
+  .results li::before,
+  .toolbox-full h3::before,
+  .studded::before,
+  .timeline > li::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  :is(.hero-lede, .about p, .prose > p, .card p, .timeline ul, .when, .parts, .parts-note, .toolbox p, .toolbox h3, .tags, .site-footer p, figcaption, .years-plot span, .years-axis span, .tomatoes li, .lost p, .crumb, .bars b, .key, cite) {
+    color: #111 !important;
+  }
+
+  .results a,
+  .blk {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1.visually-hidden {
+    padding-inline: 2rem;
+  }
+
+  .intro {
+    display: none;
+  }
+
+  :is(a:not(.results a), .nav-brand, .timeline h3 span, .card .stat, p.aside, .hand, .hero h1 span, .score b) {
+    color: #111 !important;
+  }
+
+  /* Contact as text a reader can copy off the page. */
+  .site-footer .actions {
+    display: block;
+    margin: 0 0 1rem;
+  }
+
+  .site-footer .brick {
+    display: block;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .site-footer .brick[href^="http"]::after {
+    content: ": " attr(href);
+    font-weight: 400;
+  }
+
+  .site-footer .fine::after {
+    content: " fielding.cloud";
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}

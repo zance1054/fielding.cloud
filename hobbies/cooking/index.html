@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Cooking · Alexander Fielding</title>
+    <meta
+      name="description"
+      content="Alexander Fielding's cooking: sourdough, dinners from the garden, a recipe library kept in cups and grams, and Texas-style barbecue."
+    />
+    <meta property="og:title" content="Cooking · Alexander Fielding" />
+    <meta property="og:description" content="Alexander Fielding's cooking: sourdough, dinners from the garden, a recipe library kept in cups and grams, and Texas-style barbecue." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://fielding.cloud/intro/hero-wide.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" href="/intro/title-cooking.webp" as="image" type="image/webp" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <nav aria-label="Site">
+        <a href="/#about">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/experience/">Experience</a>
+        <a href="/hobbies/" aria-current="true">Hobbies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <h1 class="visually-hidden">Cooking</h1>
+      <div class="title-art" style="--still: url('/intro/title-cooking.webp')" aria-hidden="true">
+        <video muted playsinline preload="none" tabindex="-1">
+          <source src="/intro/title-cooking.webm" type="video/webm" />
+          <source src="/intro/title-cooking.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <script>
+        // Plays the title being built. Without this, or if the video can't play, the finished
+        // word (the still behind the video) is what shows.
+        (() => {
+          const art = document.currentScript.previousElementSibling;
+          const video = art.querySelector("video");
+          if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          try {
+            const seen = "title-seen:" + location.pathname;
+            if (sessionStorage.getItem(seen)) return;
+            sessionStorage.setItem(seen, "1");
+          } catch {}
+          const fail = () => delete art.dataset.state;
+          art.dataset.state = "play"; // hides the still so the finished word doesn't flash first
+          video.lastElementChild.addEventListener("error", fail);
+          video.play().catch(fail);
+        })();
+      </script>
+      <p class="byline">Alec Fielding · Platform engineer</p>
+
+      <section class="section prose">
+        <nav class="crumb" aria-label="Breadcrumb"><a href="/hobbies/">Hobbies</a> <span aria-hidden="true">/</span> Cooking</nav>
+        <h2 class="studded">In the kitchen</h2>
+        <p>
+          I bake sourdough, cook from the garden when I can, and smoke meat whenever there's an
+          excuse. Outside the kitchen I cook on a Traeger, a Blackstone and a charcoal grill.
+        </p>
+        <p>
+          My recipes live in a Notion workspace called Kitchen. Each recipe gives every ingredient by
+          volume and by weight in grams, and the weight is the one I trust. A recipe flags any
+          ingredient that grows in my garden, and I keep the added sugar low. A pantry inventory sits
+          beside the recipes, so I can ask Claude what I can make tonight from what's on hand.
+        </p>
+        <p>
+          With coding agents I built a Python pipeline that reads a catalog of about 2,000 recipe
+          links from four cooks I trust (Joshua Weissman, Brian Lagerstrom, Meat Church and
+          Downshiftology) and rewrites each recipe to that standard.
+        </p>
+        <ul class="photos" style="--brick: var(--blue)">
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-sourdough.webp" alt="A round sourdough loaf on a cooling rack" width="750" height="1000" loading="lazy" />
+              <figcaption>Sourdough</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-scallops.webp" alt="Seared scallops and broccolini on polenta" width="750" height="1000" loading="lazy" />
+              <figcaption>Scallops over polenta</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-crusted-roast.webp" alt="A herb-crusted roast on a grill grate" width="750" height="1000" loading="lazy" />
+              <figcaption>A crusted roast on the Traeger</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-roast-plate.webp" alt="Sliced roast beef with a stuffed sweet potato and mushrooms" width="750" height="1000" loading="lazy" />
+              <figcaption>The roast, plated</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-glazed-ham.webp" alt="A glazed, spiral-cut ham on a cutting board" width="750" height="1000" loading="lazy" />
+              <figcaption>Glazed ham</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-fish-taco.webp" alt="A fried fish taco with slaw on a flour tortilla" width="750" height="1000" loading="lazy" />
+              <figcaption>Fish tacos</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-black-garlic.webp" alt="A head of black garlic cut open on a board" width="750" height="1000" loading="lazy" />
+              <figcaption>Black garlic</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/cooking-salad.webp" alt="A large chopped salad with avocado, black beans and peppers" width="750" height="1000" loading="lazy" />
+              <figcaption>A salad for a crowd</figcaption>
+            </figure>
+          </li>
+        </ul>
+      </section>
+
+      <section id="barbecue" class="section prose">
+        <h2 class="studded" style="--brick: var(--yellow)">Barbecue</h2>
+        <p>
+          I took Aaron Franklin's pitmaster MasterClass and never looked back. Now every year on Vet
+          Tech Week I cook a huge barbecue for my wife's veterinary office.
+        </p>
+        <p>
+          The meat is brisket, pulled pork and beef ribs. The sides are mac and cheese, coleslaw,
+          potato salad and pit beans.
+        </p>
+        <ul class="photos" style="--brick: var(--red)">
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-brisket-smoker.webp" alt="A brisket in a smoker with a temperature probe in it" width="1000" height="750" loading="lazy" />
+              <figcaption>Brisket on the smoker</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-brisket-unwrapped.webp" alt="Alec unwrapping a smoked brisket from butcher paper" width="750" height="1000" loading="lazy" />
+              <figcaption>Unwrapping the brisket</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-brisket-sliced.webp" alt="A tray of sliced smoked brisket" width="750" height="1000" loading="lazy" />
+              <figcaption>Sliced brisket</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-beef-ribs.webp" alt="A rack of smoked beef ribs with dark bark" width="750" height="1000" loading="lazy" />
+              <figcaption>Beef ribs</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-beef-ribs-sliced.webp" alt="Sliced beef ribs showing a smoke ring" width="750" height="1000" loading="lazy" />
+              <figcaption>Beef ribs, sliced</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-pulled-pork.webp" alt="A tray of pulled pork on a serving table" width="750" height="1000" loading="lazy" />
+              <figcaption>Pulled pork</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-coleslaw.webp" alt="A tray of coleslaw with a handwritten sign" width="750" height="1000" loading="lazy" />
+              <figcaption>Coleslaw</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/bbq-pit-beans.webp" alt="A tray of pit beans with a handwritten sign" width="750" height="1000" loading="lazy" />
+              <figcaption>Pit beans</figcaption>
+            </figure>
+          </li>
+        </ul>
+      </section>
+      <section class="section">
+        <div class="actions">
+          <a class="brick brick-ghost" href="/hobbies/">All hobbies</a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="course" aria-hidden="true"></div>
+      <h2 class="studded">Let's build something</h2>
+      <p>
+        I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
+        platforms, pipelines, or whatever you're building.
+      </p>
+      <div class="actions">
+        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+      </div>
+      <p class="hand">Thanks for stopping by.</p>
+      <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+    </footer>
+  </body>
+</html>

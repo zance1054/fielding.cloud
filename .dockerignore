@@ -1,0 +1,13 @@
+node_modules
+dist
+blender
+.git
+.claude
+.impeccable
+.firecrawl
+specs
+docs
+GLOSSARY.md
+README.md
+Dockerfile
+.dockerignore

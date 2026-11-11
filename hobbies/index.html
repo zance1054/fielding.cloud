@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Hobbies · Alexander Fielding</title>
+    <meta
+      name="description"
+      content="What Alexander Fielding builds away from work: cooking and barbecue, a vegetable garden and orchard, and projects around the house."
+    />
+    <meta property="og:title" content="Hobbies · Alexander Fielding" />
+    <meta property="og:description" content="What Alexander Fielding builds away from work: cooking and barbecue, a vegetable garden and orchard, and projects around the house." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://fielding.cloud/intro/hero-wide.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" href="/intro/title-hobbies.webp" as="image" type="image/webp" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <nav aria-label="Site">
+        <a href="/#about">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/experience/">Experience</a>
+        <a href="/hobbies/" aria-current="page">Hobbies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <h1 class="visually-hidden">Hobbies</h1>
+      <div class="title-art" style="--still: url('/intro/title-hobbies.webp')" aria-hidden="true">
+        <video muted playsinline preload="none" tabindex="-1">
+          <source src="/intro/title-hobbies.webm" type="video/webm" />
+          <source src="/intro/title-hobbies.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <script>
+        // Plays the title being built. Without this, or if the video can't play, the finished
+        // word (the still behind the video) is what shows.
+        (() => {
+          const art = document.currentScript.previousElementSibling;
+          const video = art.querySelector("video");
+          if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          try {
+            const seen = "title-seen:" + location.pathname;
+            if (sessionStorage.getItem(seen)) return;
+            sessionStorage.setItem(seen, "1");
+          } catch {}
+          const fail = () => delete art.dataset.state;
+          art.dataset.state = "play"; // hides the still so the finished word doesn't flash first
+          video.lastElementChild.addEventListener("error", fail);
+          video.play().catch(fail);
+        })();
+      </script>
+      <p class="byline">Alec Fielding · Platform engineer</p>
+
+      <section class="section prose">
+        <p>
+          Away from work I cook, grow food and build things around the house.
+        </p>
+        <p class="sign">If it can be built, I probably want to build it.</p>
+        <div class="cards">
+          <article class="card card-go" style="--brick: var(--red)">
+            <img src="/hobbies/bbq-brisket-sliced.webp" alt="A tray of sliced smoked brisket" width="750" height="1000" loading="lazy" />
+            <h2><a href="/hobbies/cooking/">Cooking</a></h2>
+            <p>
+              Sourdough, dinners from the garden and a lot of barbecue. Every recipe I keep lists its
+              ingredients in cups and in grams.
+            </p>
+            <p class="tags">Barbecue · Sourdough · Recipes in Notion</p>
+          </article>
+          <article class="card card-go" style="--brick: var(--green)">
+            <img src="/hobbies/garden-cabbage.webp" alt="A cabbage heading up in a raised bed" width="750" height="1000" loading="lazy" />
+            <h2><a href="/hobbies/gardening/">Gardening</a></h2>
+            <p>
+              About a third of an acre of raised beds, tomatoes and young fruit trees. I start nearly
+              all of it from seed.
+            </p>
+            <p class="tags">Vegetables · Fruit trees · Zone 9a</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="home-projects" class="section prose">
+        <h2 class="studded" style="--brick: var(--yellow)">Home projects</h2>
+        <p>
+          My dad and I built a run of steps down the slope behind the house and a deck at the bottom,
+          about six feet by ten, on the way to the garden. Next on the list are a pergola below the
+          raised beds and a decomposed granite path through the orchard.
+        </p>
+        <p>Indoors, I built the shelves in my office. They hold the brick sets behind this site's theme.</p>
+        <ul class="photos photos-3" style="--brick: var(--yellow)">
+          <li>
+            <figure>
+              <img src="/hobbies/home-steps-building.webp" alt="Wooden step boxes being set into a dirt slope below a house" width="750" height="1000" loading="lazy" />
+              <figcaption>The step boxes going in</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/home-steps-hillside.webp" alt="A short run of wooden steps on a hillside" width="750" height="1000" loading="lazy" />
+              <figcaption>The steps from the bottom of the slope</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/home-steps-done.webp" alt="Finished red-stained steps leading up to a patio" width="750" height="1000" loading="lazy" />
+              <figcaption>Steps filled and stained</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/home-deck-frame.webp" alt="The joists of a small deck at the foot of the steps" width="1000" height="750" loading="lazy" />
+              <figcaption>Framing the deck</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/home-deck.webp" alt="A small red-stained deck seen from above" width="1000" height="750" loading="lazy" />
+              <figcaption>Deck boards down</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure>
+              <img src="/hobbies/home-shelves.webp" alt="Wooden shelves filled with brick-built spaceships beside a desk" width="1000" height="750" loading="lazy" />
+              <figcaption>Office shelves</figcaption>
+            </figure>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="course" aria-hidden="true"></div>
+      <h2 class="studded">Let's build something</h2>
+      <p>
+        I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
+        platforms, pipelines, or whatever you're building.
+      </p>
+      <div class="actions">
+        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+      </div>
+      <p class="hand">Thanks for stopping by.</p>
+      <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+    </footer>
+  </body>
+</html>

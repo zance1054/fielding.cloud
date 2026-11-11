@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Experience · Alexander Fielding</title>
+    <meta
+      name="description"
+      content="Where Alexander Fielding has worked: co-founder and CTO of The Lobbi Corp, Software Architect at TransUnion from 2019 to 2026, his education and every tool he has used."
+    />
+    <meta property="og:title" content="Experience · Alexander Fielding" />
+    <meta property="og:description" content="Where Alexander Fielding has worked: co-founder and CTO of The Lobbi Corp, Software Architect at TransUnion from 2019 to 2026, his education and every tool he has used." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://fielding.cloud/intro/hero-wide.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" href="/intro/title-experience.webp" as="image" type="image/webp" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <nav aria-label="Site">
+        <a href="/#about">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/experience/" aria-current="page">Experience</a>
+        <a href="/hobbies/">Hobbies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <h1 class="visually-hidden">Experience</h1>
+      <div class="title-art" style="--still: url('/intro/title-experience.webp')" aria-hidden="true">
+        <video muted playsinline preload="none" tabindex="-1">
+          <source src="/intro/title-experience.webm" type="video/webm" />
+          <source src="/intro/title-experience.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <script>
+        // Plays the title being built. Without this, or if the video can't play, the finished
+        // word (the still behind the video) is what shows.
+        (() => {
+          const art = document.currentScript.previousElementSibling;
+          const video = art.querySelector("video");
+          if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          try {
+            const seen = "title-seen:" + location.pathname;
+            if (sessionStorage.getItem(seen)) return;
+            sessionStorage.setItem(seen, "1");
+          } catch {}
+          const fail = () => delete art.dataset.state;
+          art.dataset.state = "play"; // hides the still so the finished word doesn't flash first
+          video.lastElementChild.addEventListener("error", fail);
+          video.play().catch(fail);
+        })();
+      </script>
+      <p class="byline">Alec Fielding · Platform engineer</p>
+      <nav class="jump" aria-label="On this page">
+        <a href="#work">Work history</a>
+        <a href="#education">Education</a>
+        <a href="#toolbox">Full toolbox</a>
+      </nav>
+
+      <section id="work" class="section">
+        <h2 class="studded" style="--brick: var(--blue)">Work history</h2>
+        <p class="aside">Newest brick on top.</p>
+        <figure class="years">
+          <div class="years-plot">
+            <p style="--brick: var(--red)">The Lobbi Corp <span>Aug 2025 to now</span></p>
+            <div style="--from: 91; --to: 107; --brick: var(--red)"></div>
+            <p style="--brick: var(--blue)">TransUnion <span>Sep 2019 to Aug 2026</span></p>
+            <div style="--from: 20; --to: 104; --brick: var(--blue)"></div>
+            <p style="--brick: var(--yellow)">CSULB Institute for Research and Assessment <span>Nov 2018 to May 2019</span></p>
+            <div style="--from: 10; --to: 16; --brick: var(--yellow)"></div>
+            <p style="--brick: var(--green)">City of LA <span>May to Nov 2018</span></p>
+            <div style="--from: 4; --to: 10; --brick: var(--green)"></div>
+          </div>
+          <div class="years-axis" aria-hidden="true">
+            <span>2018</span><span>2020</span><span>2022</span><span>2024</span><span>2026</span>
+          </div>
+          <figcaption>The last year at TransUnion and the first at Lobbi ran side by side.</figcaption>
+        </figure>
+        <ol class="timeline">
+          <li id="lobbi" style="--brick: var(--red)">
+            <h3>Co-Founder &amp; CTO <span>The Lobbi Corp, the three-engineer startup behind Wagon Works AI</span></h3>
+            <p class="when">Aug 2025 – present · Remote · alongside TransUnion until Aug 2026</p>
+            <ul>
+              <li>
+                Co-led a three-person team that shipped <a href="/projects/#wagon-works">Wagon Works AI</a>, a Microsoft 365 AI workspace
+                desktop app, from v1.0.0 (Aug 2026) through v1.0.28 to external beta testers.
+              </li>
+              <li>
+                Built a <a href="/projects/#pipeline-factories">GitHub Actions pipeline factory</a> of 19 reusable composite actions (shared build steps), each pinned to an exact version across a 17-repository fleet. The GitHub organization's own settings are kept in Terraform. It cut the release build
+                job from 11 to 14 minutes down to about 3.4.
+              </li>
+              <li>
+                Built an OpenTofu CI factory that provisions pipelines for 10 services across 2 Harness
+                projects from one-line entries, with Snyk, gitleaks and SonarQube gates.
+              </li>
+              <li>
+                Designed and ran the <a href="/projects/#agent-delivery">agent-driven delivery model</a> under which the team merged 661 pull
+                requests in about 3.5 weeks. Coding agents write the code I deliver.
+              </li>
+              <li>Automated production credential rotation on a 7-day cadence with one-command rollback.</li>
+              <li>Led a <a href="/projects/#llm-guardrails">security review</a> of the app before release.</li>
+            </ul>
+          </li>
+          <li id="transunion" style="--brick: var(--blue)">
+            <h3>Software Architect, CI/CD Team <span>TransUnion</span></h3>
+            <p class="when">Sep 2019 – Aug 2026 · San Luis Obispo, CA</p>
+            <ul>
+              <li>
+                Led the <a href="/projects/#kubernetes-migration">migration of 80+ applications</a> from Docker EE to Kubernetes ahead of a hard
+                deadline, avoiding $1.8M in enterprise license costs.
+              </li>
+              <li>
+                Consolidated <a href="/projects/#harness-consolidation">three Jenkins instances onto Harness</a>, covering 408 pipelines, 1,000+
+                repositories and 23 teams.
+              </li>
+              <li>
+                Built a Terraform <a href="/projects/#pipeline-factories">"Pipeline Factory"</a> for self-service Harness pipelines, and
+                repository-as-code with standard rules and CODEOWNERS.
+              </li>
+              <li>Codified Harness RBAC (who is allowed to do what) for 23 teams in OpenTofu on a least-privilege model.</li>
+              <li>Implemented Flux CD GitOps deployments (releases driven from Git) for about 40 applications to the company's private cloud.</li>
+              <li>
+                Integrated SonarQube, Checkmarx, Sysdig and Wiz scanning into pipelines, and implemented
+                HashiCorp Vault secrets management.
+              </li>
+              <li>
+                Led the 8-person CI/CD team through 2024 and 2025 during the manager's extended leave,
+                running one-on-ones, performance reviews and sprint planning.
+              </li>
+            </ul>
+          </li>
+          <li style="--brick: var(--yellow)">
+            <h3>Oracle SQL Programmer <span>CSULB Institute for Research and Assessment</span></h3>
+            <p class="when">Nov 2018 – May 2019 · Long Beach, CA</p>
+            <ul>
+              <li>Wrote Python and SQL tooling to load sensitive education data into Oracle.</li>
+              <li>Worked with Long Beach USD, Long Beach City College and CSULB.</li>
+            </ul>
+          </li>
+          <li style="--brick: var(--green)">
+            <h3>Database Design Intern <span>City of LA, Office of the CAO</span></h3>
+            <p class="when">May 2018 – Nov 2018 · Los Angeles, CA</p>
+            <ul>
+              <li>Designed and built a database tracking disaster-grant funding for the city.</li>
+            </ul>
+          </li>
+        </ol>
+      </section>
+
+      <section id="education" class="section">
+        <h2 class="studded" style="--brick: var(--blue)">Education</h2>
+        <div class="toolbox">
+          <div>
+            <h3>Degrees</h3>
+            <p>B.S., Computer Science<br />California State University, Long Beach, 2019</p>
+            <p>A.S., Mathematics<br />Cuesta College, 2017</p>
+          </div>
+          <div>
+            <h3>Certification</h3>
+            <p>AWS Certified Cloud Practitioner</p>
+          </div>
+          <div>
+            <h3>Publication</h3>
+            <p>
+              "Exploring the Binary Nature of STF 2128 Using Separation and Position Angle
+              Measurements", <cite>Journal of Double Star Observations</cite>, Vol. 14, p. 54
+            </p>
+            <p class="aside">Yes, a double star. Ask me about it.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="toolbox" class="section">
+        <h2 class="studded">Full toolbox</h2>
+        <p class="parts-note">Every tool I've used on a job or a project. Each group runs strongest first. The colors follow the home page: blue to build, red to ship, green to run, yellow for agents.</p>
+        <div class="toolbox toolbox-full">
+          <div style="--brick: var(--blue)">
+            <h3>Languages</h3>
+            <ul class="parts">
+              <li>Python</li>
+              <li>Go</li>
+              <li>PowerShell</li>
+              <li>TypeScript / Electron</li>
+              <li>Groovy</li>
+              <li>Bash</li>
+              <li>HTML/CSS</li>
+              <li>SQL</li>
+              <li>JavaScript</li>
+              <li>Java</li>
+              <li>Socket / UDP messaging</li>
+              <li>C++</li>
+              <li>C#</li>
+              <li>Microsoft Access / VBA</li>
+            </ul>
+          </div>
+          <div style="--brick: var(--blue)">
+            <h3>Frameworks and web</h3>
+            <ul class="parts">
+              <li>MongoDB / Beanie</li>
+              <li>FastAPI</li>
+              <li>React</li>
+              <li>Django</li>
+              <li>Stripe</li>
+              <li>.NET</li>
+              <li>React Native</li>
+              <li>MERN</li>
+              <li>NumPy / Pandas</li>
+            </ul>
+          </div>
+          <div style="--brick: var(--green)">
+            <h3>Cloud and infrastructure</h3>
+            <ul class="parts">
+              <li>Kubernetes</li>
+              <li>Unraid / self-hosted Docker</li>
+              <li>Amazon ECS / ECR / CodeArtifact</li>
+              <li>Nginx Proxy Manager / Let's Encrypt</li>
+              <li>PostgreSQL</li>
+              <li>Microsoft 365 platform (Graph, SharePoint, Teams, MSAL)</li>
+              <li>Azure</li>
+              <li>Tailscale</li>
+              <li>Helm</li>
+              <li>Docker EE</li>
+              <li>Private corporate cloud</li>
+              <li>AWS</li>
+              <li>Azure Kubernetes Service (AKS)</li>
+              <li>MySQL / MariaDB</li>
+              <li>AWS ALB / ACM</li>
+              <li>Vercel</li>
+              <li>Cloudflare</li>
+              <li>Linux virtual machines</li>
+              <li>AWS API Gateway</li>
+            </ul>
+          </div>
+          <div style="--brick: var(--red)">
+            <h3>CI/CD and DevSecOps</h3>
+            <ul class="parts">
+              <li>Harness</li>
+              <li>CodeRabbit</li>
+              <li>GitHub Actions (composite actions, reusable workflows, self-hosted runners)</li>
+              <li>Docker Hardened Images</li>
+              <li>Doppler</li>
+              <li>Keycloak / OIDC</li>
+              <li>Flux CD</li>
+              <li>SonarQube</li>
+              <li>JFrog Artifactory</li>
+              <li>Sysdig</li>
+              <li>Wiz</li>
+              <li>Checkmarx</li>
+              <li>Jenkins</li>
+              <li>HashiCorp Vault</li>
+              <li>Code signing (Authenticode, SSL.com eSigner)</li>
+              <li>Snyk</li>
+              <li>gitleaks</li>
+              <li>ArgoCD</li>
+            </ul>
+          </div>
+          <div style="--brick: var(--red)">
+            <h3>Infrastructure as code</h3>
+            <ul class="parts">
+              <li>OpenTofu</li>
+              <li>Terraform</li>
+              <li>GitHub organization as code (Terraform github provider)</li>
+              <li>Bicep</li>
+              <li>Ansible</li>
+            </ul>
+          </div>
+          <div style="--brick: var(--green)">
+            <h3>Observability</h3>
+            <ul class="parts">
+              <li>Splunk</li>
+              <li>PostHog</li>
+              <li>OpenTelemetry</li>
+              <li>Grafana Alloy</li>
+              <li>Grafana</li>
+            </ul>
+          </div>
+          <div style="--brick: var(--red)">
+            <h3>Testing</h3>
+            <ul class="parts">
+              <li>Playwright</li>
+              <li>Selenium</li>
+            </ul>
+          </div>
+          <div style="--brick: var(--yellow)">
+            <h3>AI and agents</h3>
+            <ul class="parts">
+              <li>Multi-agent orchestration</li>
+              <li>T3 Code (agent orchestration)</li>
+              <li>OpenAI Codex</li>
+              <li>Anthropic API</li>
+              <li>MCP (Model Context Protocol)</li>
+              <li>Claude Code</li>
+              <li>LLM application design (structured output, grounding, tool guardrails)</li>
+              <li>LLM tool calling</li>
+              <li>LLM testing with a scripted model</li>
+              <li>Prompt-injection defense</li>
+              <li>Microsoft 365 Copilot APIs</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="course" aria-hidden="true"></div>
+      <h2 class="studded">Let's build something</h2>
+      <p>
+        I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
+        platforms, pipelines, or whatever you're building.
+      </p>
+      <div class="actions">
+        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+      </div>
+      <p class="hand">Thanks for stopping by.</p>
+      <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+    </footer>
+  </body>
+</html>

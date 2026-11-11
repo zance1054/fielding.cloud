@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Alexander Fielding · Platform Engineer</title>
+    <meta
+      name="description"
+      content="Alexander Fielding, platform engineer in San Luis Obispo, CA. CI/CD pipelines, Kubernetes and infrastructure as code, delivered with coding agents."
+    />
+    <meta property="og:title" content="Alexander Fielding · Platform Engineer" />
+    <meta property="og:description" content="Alexander Fielding, platform engineer in San Luis Obispo, CA. CI/CD pipelines, Kubernetes and infrastructure as code, delivered with coding agents." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://fielding.cloud/intro/hero-wide.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" href="/intro/hero-tall.webp" as="image" type="image/webp" media="(max-aspect-ratio: 4/5)" />
+    <link rel="preload" href="/intro/hero-wide.webp" as="image" type="image/webp" media="not all and (max-aspect-ratio: 4/5)" />
+    <script>
+      // Decide before first paint so the page never flashes before the intro covers it.
+      try {
+        const seen = localStorage.getItem("intro-seen") === "1";
+        const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        document.documentElement.dataset.intro = seen || calm || location.hash ? "done" : "play";
+      } catch {
+        document.documentElement.dataset.intro = "done";
+      }
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <dialog class="intro" id="intro" aria-label="Intro animation">
+      <video class="intro-video art" muted playsinline preload="none" aria-hidden="true" tabindex="-1">
+        <source src="/intro/intro-tall.webm" type="video/webm" media="(max-aspect-ratio: 4/5)" />
+        <source src="/intro/intro-tall.mp4" type="video/mp4" media="(max-aspect-ratio: 4/5)" />
+        <source src="/intro/intro-wide.webm" type="video/webm" />
+        <source src="/intro/intro-wide.mp4" type="video/mp4" />
+      </video>
+      <button class="intro-skip" type="button" autofocus>Skip intro</button>
+    </dialog>
+    <script>
+      // Inline so the intro can always be left, even if the module script is slow or never loads.
+      (() => {
+        const root = document.documentElement;
+        const intro = document.getElementById("intro");
+        if (root.dataset.intro !== "play") return;
+        // Leaving the intro by any route, Escape included, means it has been seen.
+        const done = () => {
+          root.dataset.intro = "done";
+          try {
+            localStorage.setItem("intro-seen", "1");
+          } catch {}
+          if (intro.open) intro.close();
+        };
+        intro.addEventListener("close", done); // Escape closes a modal dialog natively
+        intro.querySelector("button").addEventListener("click", done);
+        try {
+          intro.showModal(); // modal: the page behind is inert and focus starts on Skip
+        } catch {
+          done();
+          return;
+        }
+        const video = intro.querySelector("video");
+        video.preload = "auto";
+        video.load();
+        // src/main.ts cancels this once frames are on screen; otherwise the page is shown anyway.
+        window.introFailsafe = setTimeout(done, 4000);
+      })();
+    </script>
+
+    <header class="nav">
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <nav aria-label="Site">
+        <a href="#about">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/experience/">Experience</a>
+        <a href="/hobbies/">Hobbies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero">
+        <div class="hero-art art" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <h1>Building your infrastructure and tools, <span>brick by brick.</span></h1>
+          <p class="hero-lede">
+            I'm Alec Fielding, a platform engineer in San Luis Obispo, CA. I build the pipelines,
+            clusters and infrastructure-as-code that let teams ship on their own, and I run delivery
+            with coding agents.
+          </p>
+          <div class="actions">
+            <a class="brick brick-red" href="/projects/">See what I've built</a>
+            <a class="brick brick-ghost" href="#contact">Get in touch</a>
+          </div>
+        </div>
+        <p class="hero-note">
+          This pipeline is a Blender scene generated by a Python script and rendered headless.
+          <button class="replay" type="button">Replay the build</button>
+        </p>
+      </section>
+
+      <section id="results" class="section">
+        <h2 class="studded" style="--brick: var(--yellow)">Built so far</h2>
+        <ul class="results">
+          <li style="--brick: var(--blue)">
+            <a href="/projects/#kubernetes-migration">
+              <b>$1.8M</b>
+              in license costs avoided by moving 80+ applications to Kubernetes
+            </a>
+          </li>
+          <li style="--brick: var(--red)">
+            <a href="/projects/#harness-consolidation">
+              <b>408</b>
+              pipelines moved from three Jenkins instances onto one Harness platform
+            </a>
+          </li>
+          <li class="results-yellow">
+            <a href="/projects/#agent-delivery">
+              <b>661</b>
+              pull requests the team merged in about 3.5 weeks, with coding agents writing the code
+            </a>
+          </li>
+          <li style="--brick: var(--green)">
+            <a href="/projects/#pipeline-factories">
+              <b>3.4 min</b>
+              or so for a release build job now. It used to take 11 to 14.
+            </a>
+          </li>
+        </ul>
+        <p class="aside">Every one of these has a story on the Projects page.</p>
+      </section>
+
+      <section id="about" class="section about">
+        <h2 class="studded">About</h2>
+        <div class="about-side">
+          <img class="portrait" src="/profile.webp" alt="Alec Fielding" width="240" height="240" loading="lazy" />
+          <p class="sign">Measure twice, cut once.</p>
+        </div>
+        <div>
+          <p>
+            I'm co-founder and CTO of The Lobbi Corp, a three-engineer startup. I own our CI/CD and
+            infrastructure, and I co-led Wagon Works AI, a Microsoft 365 AI workspace desktop app, to
+            a production beta with external testers.
+          </p>
+          <p>
+            Until August 2026 I was also Software Architect on TransUnion's CI/CD team, where I spent
+            nearly seven years supporting 23 development teams. I led the migration of 80+
+            applications from Docker EE to Kubernetes and consolidated three Jenkins instances onto
+            Harness.
+          </p>
+          <p>
+            Away from work I'm a husband, a tech enthusiast, an amateur woodworker, and a hobbyist who
+            can't seem to pick a lane. If it can be built, I probably want to build it.
+          </p>
+        </div>
+      </section>
+
+      <section id="toolbox" class="section">
+        <h2 class="studded">Toolbox</h2>
+        <div class="toolbox">
+          <div>
+            <h3>Build</h3>
+            <ul class="chips" style="--brick: var(--blue)">
+              <li>Python</li><li>Go</li><li>PowerShell</li><li>TypeScript</li><li>Bash</li><li>React</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Ship</h3>
+            <ul class="chips" style="--brick: var(--red)">
+              <li>Terraform / OpenTofu</li><li>Kubernetes</li><li>Harness</li><li>GitHub Actions</li><li>Flux CD</li><li>Jenkins</li><li>Helm</li><li>Docker</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Run</h3>
+            <ul class="chips" style="--brick: var(--green)">
+              <li>PostgreSQL</li><li>Azure</li><li>AWS</li><li>Splunk</li><li>PostHog</li><li>OpenTelemetry</li>
+            </ul>
+          </div>
+          <div>
+            <h3>With agents</h3>
+            <ul class="chips chips-yellow">
+              <li>Multi-agent orchestration</li><li>Anthropic API</li><li>MCP</li><li>Claude Code</li>
+            </ul>
+          </div>
+        </div>
+        <p class="aside">If it clicks together, it's probably in here.</p>
+        <div class="actions">
+          <a class="brick brick-ghost" href="/experience/#toolbox">See the full toolbox</a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="course" aria-hidden="true"></div>
+      <h2 class="studded">Let's build something</h2>
+      <p>
+        I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
+        platforms, pipelines, or whatever you're building. Brisket talk is welcome too.
+      </p>
+      <div class="actions">
+        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+      </div>
+      <p class="hand">Thanks for stopping by.</p>
+      <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+    </footer>
+  </body>
+</html>
