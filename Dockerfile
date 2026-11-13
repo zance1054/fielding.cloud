@@ -3,9 +3,12 @@
 FROM dhi.io/node:24-dev AS build
 WORKDIR /app
 RUN npm install --global --ignore-scripts pnpm@12.18.0
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
+# Vite bakes these into the bundle; without them the build ships with analytics off.
+ARG VITE_POSTHOG_KEY
+ARG VITE_POSTHOG_HOST
 RUN pnpm build
 
 # Runs as a non-root user and listens on 8080. No shell or package manager in this image.

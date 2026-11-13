@@ -20,26 +20,26 @@
       href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
       rel="stylesheet"
     />
-    <link rel="preload" href="/intro/title-gardening.webp" as="image" type="image/webp" />
     <script type="module" src="/src/main.ts"></script>
   </head>
-  <body>
+  <body id="top">
     <a class="skip" href="#main">Skip to content</a>
     <header class="nav">
-      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec<span class="nav-surname"> Fielding</span></span></a>
       <nav aria-label="Site">
-        <a href="/#about">About</a>
         <a href="/projects/">Projects</a>
         <a href="/experience/">Experience</a>
         <a href="/hobbies/" aria-current="true">Hobbies</a>
-        <a href="#contact">Contact</a>
+        <a class="brick nav-contact" href="#contact">Contact</a>
       </nav>
     </header>
 
     <main id="main" tabindex="-1">
       <h1 class="visually-hidden">Gardening</h1>
-      <div class="title-art" style="--still: url('/intro/title-gardening.webp')" aria-hidden="true">
+      <div class="title-art" style="--still: url('/intro/title-gardening.webp'); --still-tall: url('/intro/title-gardening-tall.webp')" aria-hidden="true">
         <video muted playsinline preload="none" tabindex="-1">
+          <source src="/intro/title-gardening-tall.webm" type="video/webm" media="(max-aspect-ratio: 4/5)" />
+          <source src="/intro/title-gardening-tall.mp4" type="video/mp4" media="(max-aspect-ratio: 4/5)" />
           <source src="/intro/title-gardening.webm" type="video/webm" />
           <source src="/intro/title-gardening.mp4" type="video/mp4" />
         </video>
@@ -56,9 +56,12 @@
             if (sessionStorage.getItem(seen)) return;
             sessionStorage.setItem(seen, "1");
           } catch {}
-          const fail = () => delete art.dataset.state;
+          const fail = () => { delete art.dataset.state; video.pause(); };
+          const timer = setTimeout(fail, 8000);
+          video.addEventListener("ended", () => { clearTimeout(timer); fail(); });
           art.dataset.state = "play"; // hides the still so the finished word doesn't flash first
           video.lastElementChild.addEventListener("error", fail);
+          video.addEventListener("error", fail);
           video.play().catch(fail);
         })();
       </script>
@@ -66,7 +69,7 @@
 
       <section class="section prose">
         <nav class="crumb" aria-label="Breadcrumb"><a href="/hobbies/">Hobbies</a> <span aria-hidden="true">/</span> Gardening</nav>
-        <h2 class="studded" style="--brick: var(--green)">The garden</h2>
+        <h2 class="studded">The garden</h2>
         <p>
           I started gardening seriously in 2025, on about a third of an acre in San Luis Obispo
           County, in USDA Zone 9a. I follow permaculture ideas and I'm working toward growing most of
@@ -94,7 +97,7 @@
             <li><span>Black Krim</span><i class="tom tom-dark" style="--n: 2" role="img" aria-label="2 plants"></i></li>
             <li><span>One I forgot to label</span><i class="tom tom-none" style="--n: 1" role="img" aria-label="1 plant"></i></li>
           </ul>
-          <figcaption>One dot for each plant, in the colour its fruit ripens to.</figcaption>
+          <figcaption>One dot for each plant, in its ripe fruit color.</figcaption>
         </figure>
         <p>
           Not all of it works. In 2026 gophers took the pole beans twice, and poor germination and
@@ -110,90 +113,97 @@
           and when, the local frost dates, and what to sow next. The peppers end up as fermented hot
           sauce and the basil as pesto.
         </p>
-        <ul class="photos photos-5" style="--brick: var(--green)">
-          <li>
+        <ul class="photos photos-landscape">
+<li>
             <figure>
               <img src="/hobbies/garden-seed-starts.webp" alt="Trays of seedlings under grow lights" width="1000" height="750" loading="lazy" />
               <figcaption>Seed starts under grow lights</figcaption>
             </figure>
           </li>
-          <li>
-            <figure>
-              <img src="/hobbies/garden-cabbage.webp" alt="A cabbage heading up in a raised bed" width="750" height="1000" loading="lazy" />
-              <figcaption>Cabbage in a raised bed</figcaption>
-            </figure>
-          </li>
-          <li>
-            <figure>
-              <img src="/hobbies/garden-broccoli.webp" alt="A large head of broccoli on a cutting board" width="750" height="1000" loading="lazy" />
-              <figcaption>Broccoli</figcaption>
-            </figure>
-          </li>
-          <li>
-            <figure>
-              <img src="/hobbies/garden-greens.webp" alt="Alec holding a bowl of fresh-picked greens" width="750" height="1000" loading="lazy" />
-              <figcaption>Greens for dinner</figcaption>
-            </figure>
-          </li>
-          <li>
-            <figure>
-              <img src="/hobbies/garden-harvest.webp" alt="Alec holding a bunch of chard and a beet" width="750" height="1000" loading="lazy" />
-              <figcaption>Harvest day</figcaption>
-            </figure>
-          </li>
-          <li>
-            <figure>
-              <img src="/hobbies/garden-blossom.webp" alt="A young fruit tree covered in pink blossom" width="750" height="1000" loading="lazy" />
-              <figcaption>A fruit tree in bloom</figcaption>
-            </figure>
-          </li>
-          <li>
-            <figure>
-              <img src="/hobbies/garden-young-tree.webp" alt="A young fruit tree in leaf on a grassy slope" width="750" height="1000" loading="lazy" />
-              <figcaption>A fruit tree in its second year</figcaption>
-            </figure>
-          </li>
-          <li>
+<li>
             <figure>
               <img src="/hobbies/garden-citrus.webp" alt="Citrus trees growing in fabric bags on a patio" width="1000" height="750" loading="lazy" />
               <figcaption>Citrus in grow bags</figcaption>
             </figure>
           </li>
-          <li>
+</ul>
+<ul class="photos photos-portrait">
+<li>
+            <figure>
+              <img src="/hobbies/garden-cabbage.webp" alt="A cabbage heading up in a raised bed" width="750" height="1000" loading="lazy" />
+              <figcaption>Cabbage in a raised bed</figcaption>
+            </figure>
+          </li>
+<li>
+            <figure>
+              <img src="/hobbies/garden-broccoli.webp" alt="A large head of broccoli on a cutting board" width="750" height="1000" loading="lazy" />
+              <figcaption>Broccoli</figcaption>
+            </figure>
+          </li>
+<li>
+            <figure>
+              <img src="/hobbies/garden-greens.webp" alt="Alec holding a bowl of fresh-picked greens" width="750" height="1000" loading="lazy" />
+              <figcaption>Greens for dinner</figcaption>
+            </figure>
+          </li>
+<li>
+            <figure>
+              <img src="/hobbies/garden-harvest.webp" alt="Alec holding a bunch of chard and a beet" width="750" height="1000" loading="lazy" />
+              <figcaption>Harvest day</figcaption>
+            </figure>
+          </li>
+<li>
+            <figure>
+              <img src="/hobbies/garden-blossom.webp" alt="A young fruit tree covered in pink blossom" width="750" height="1000" loading="lazy" />
+              <figcaption>A fruit tree in bloom</figcaption>
+            </figure>
+          </li>
+<li>
+            <figure>
+              <img src="/hobbies/garden-young-tree.webp" alt="A young fruit tree in leaf on a grassy slope" width="750" height="1000" loading="lazy" />
+              <figcaption>A fruit tree in its second year</figcaption>
+            </figure>
+          </li>
+<li>
             <figure>
               <img src="/hobbies/garden-zinnias.webp" alt="Orange, red and pink zinnias in bloom" width="750" height="1000" loading="lazy" />
               <figcaption>Zinnias</figcaption>
             </figure>
           </li>
-          <li>
+<li>
             <figure>
               <img src="/hobbies/garden-sunflower.webp" alt="A sunflower in dry grass" width="750" height="1000" loading="lazy" />
               <figcaption>A sunflower</figcaption>
             </figure>
           </li>
-        </ul>
+</ul>
       </section>
-      <section class="section">
-        <div class="actions">
-          <a class="brick brick-ghost" href="/hobbies/">All hobbies</a>
-        </div>
-      </section>
+      <nav class="page-end section" aria-label="Continue reading"><a class="brick" href="/hobbies/">Back to Hobbies</a></nav>
     </main>
 
     <footer id="contact" class="site-footer">
       <div class="course" aria-hidden="true"></div>
-      <h2 class="studded">Let's build something</h2>
+      <div class="footer-composition">
+      <div class="footer-copy">
+      <h2 class="studded">Let's&nbsp;build something</h2>
       <p>
         I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
         platforms, pipelines, or whatever you're building.
       </p>
       <div class="actions">
-        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
-        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
-        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+        <span class="email-actions"><a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <button class="copy-email brick brick-ghost" type="button" hidden>Copy</button></span>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
       </div>
-      <p class="hand">Thanks for stopping by.</p>
+      <p class="copy-address" hidden>alec@fielding.cloud</p>
+      <p class="copy-status" role="status" aria-live="polite"></p>
+      <p class="closing">Rematch with the gophers in the spring.</p>
+      <div class="footer-utilities"><button class="print-page text-control" type="button" hidden>Print / save as PDF</button><a class="back-top text-control" href="#top">Back to top</a></div>
       <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+      </div>
+      <img class="footer-art" src="/intro/footer.webp" width="1200" height="900" alt="" aria-hidden="true" loading="lazy" />
+      </div>
     </footer>
   </body>
 </html>

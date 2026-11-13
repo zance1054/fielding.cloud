@@ -18,6 +18,7 @@ from figure import build_figure
 from intro import BRICK_H, COLORS, FPS, brick_material, brick_mesh, brick_object, build_stage, clear_scene, configure_render, key, material
 
 WORD = os.environ.get("TITLE_WORD", "PROJECTS").upper()
+CUT = os.environ.get("TITLE_CUT", "wide")
 
 # Brick-pixel letters, top row first.
 FONT = {
@@ -55,7 +56,7 @@ WORKING = math.radians(125)  # the figure runs to the right, turned towards the 
 TWIST = 0.6  # and its upper body turns further, to face the word as it throws
 FIGURE_SCALE = 1.4
 REST_GAP = 4.5  # where the figure ends up, right of the last letter
-SIZE = (1920, 480)
+SIZE = (960, 720) if CUT == "tall" else (1920, 480)
 
 LIGHTS = [
     ("Key", (6, -40, 46), (40, 0, 8), 80000, 70, (1.0, 0.96, 0.9)),
@@ -168,6 +169,14 @@ def hand_at(x, arm):
     word, on that arm's side of the body."""
     facing = WORKING + TWIST
     side, reach = (-1.47, 1.47)[arm], 2.1
+    if CUT == "tall":
+        width = plan_word()[2] * 2 + 1
+        scale = ((width + 4) * 0.75 - 7 * BRICK_H - 2) / (7.5 if OUTFIT == "chef" else 6.6) / FIGURE_SCALE
+        return (
+            0.45 * x + scale * (side * math.cos(facing) + reach * math.sin(facing)),
+            3 + scale * (FIGURE_Y + side * math.sin(facing) - reach * math.cos(facing)),
+            7 * BRICK_H + 5.5 * scale,
+        )
     return (
         x + side * math.cos(facing) + reach * math.sin(facing),
         FIGURE_Y + side * math.sin(facing) - reach * math.cos(facing),
@@ -302,12 +311,25 @@ def plant_tree(x, sprout):
 def frame_shot(cam, target, left, right):
     """Fit the word and the resting figure to the width of the frame."""
     centre, width = (left + right) / 2, right - left + 5
+    if CUT == "tall":
+        bricks = plan_word()[0]
+        width = max(b[0] + b[2] / 2 for b in bricks) - min(b[0] - b[2] / 2 for b in bricks) + 4
+        cam.data.type = "ORTHO"
+        cam.data.ortho_scale = width
+        cam.data.dof.use_dof = False
+        target.location = (0, 0, width * 0.375 - 1)
+        cam.location = (0, -100, target.location.z + 8)
+        return
     cam.data.lens = 50
     cam.data.dof.use_dof = False
     distance = width / (cam.data.sensor_width / cam.data.lens)
+    if SIZE[1] > SIZE[0]:
+        # AUTO sensor fit uses the vertical sensor in a portrait frame. Preserve horizontal room.
+        distance *= SIZE[1] / SIZE[0]
     elevation = math.radians(7)
-    target.location = (centre, 0, 4.4)
-    cam.location = (centre, -distance * math.cos(elevation), 4.4 + distance * math.sin(elevation))
+    height = 4.4
+    target.location = (centre, 0, height)
+    cam.location = (centre, -distance * math.cos(elevation), height + distance * math.sin(elevation))
 
 
 def main():
@@ -322,8 +344,27 @@ def main():
     fig["root"].scale = (FIGURE_SCALE,) * 3
     rest_x = right + REST_GAP
     arrived = animate_figure(fig, path, finale, rest_x, swings)
+    if CUT == "tall":
+        # A second stage above the letters: the complete word stays in the foreground.
+        # Parent the animated rig so its original throwing/waving motion is preserved.
+        stage = bpy.data.objects.new("Tall figure stage", None)
+        bpy.context.scene.collection.objects.link(stage)
+        fig["root"].parent = stage
+        width = right * 2 + 1
+        scale = ((width + 4) * 0.75 - 7 * BRICK_H - 2) / (7.5 if OUTFIT == "chef" else 6.6) / FIGURE_SCALE
+        stage.scale = (scale,) * 3
+        stage.location = (-rest_x * scale, 3, 7 * BRICK_H)
+        # Keep the running figure in frame before it arrives at its central resting spot.
+        key(stage, "location", [(f, ((0.45 - scale) * x, 3, 7 * BRICK_H), "LINEAR", "AUTO") for f, x in path] + [
+            (arrived, (-rest_x * scale, 3, 7 * BRICK_H), "LINEAR", "AUTO")])
+        bpy.context.scene.world.node_tree.nodes.get("Background").inputs["Strength"].default_value = 0.6
+        for light in bpy.data.lights:
+            light.energy *= 1.65
     if PLANT:
         plant_tree(rest_x + TREE_GAP, arrived + 8)
+        if CUT == "tall":
+            tree = bpy.data.objects["Tree"]
+            tree.location = (width * 0.3, 2, 7 * BRICK_H)
     frame_shot(cam, target, -right, rest_x + (TREE_GAP + 2.5 if PLANT else 2.5))
     end = finale + TAIL + PLANT
     configure_render(end, SIZE)

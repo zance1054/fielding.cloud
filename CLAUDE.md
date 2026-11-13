@@ -37,6 +37,7 @@ page titles; an empty value skips that group. `BLENDER` overrides the Blender ex
 ```sh
 CUTS= WORDS="cooking" pnpm intro:render    # one page title, no home intro
 CUTS="wide tall" WORDS= pnpm intro:render  # the home intro only
+CUTS= TITLE_CUTS=tall WORDS="projects experience hobbies cooking gardening" pnpm intro:render # tall titles only
 ```
 
 The container needs `docker login dhi.io` once, because both stages use Docker Hardened Images.

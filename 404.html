@@ -22,23 +22,22 @@
     />
     <script type="module" src="/src/main.ts"></script>
   </head>
-  <body>
+  <body id="top" class="not-found">
     <a class="skip" href="#main">Skip to content</a>
     <header class="nav">
-      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec<span class="nav-surname"> Fielding</span></span></a>
       <nav aria-label="Site">
-        <a href="/#about">About</a>
         <a href="/projects/">Projects</a>
         <a href="/experience/">Experience</a>
         <a href="/hobbies/">Hobbies</a>
-        <a href="#contact">Contact</a>
+        <a class="brick nav-contact" href="#contact">Contact</a>
       </nav>
     </header>
 
     <main id="main" tabindex="-1">
       <section class="section lost">
-        <h1 class="studded">No bricks at this address</h1>
-        <p class="aside">It may have rolled under the couch.</p>
+        <div class="lost-art" aria-hidden="true"></div>
+        <h1 class="studded"><span class="keep-words">This piece</span> <span class="keep-words">is missing</span></h1>
         <p id="asked">The link you followed doesn't go anywhere. These do.</p>
         <script>
           // Name the address that was asked for, so a typo is easy to spot.
@@ -55,18 +54,27 @@
 
     <footer id="contact" class="site-footer">
       <div class="course" aria-hidden="true"></div>
-      <h2 class="studded">Let's build something</h2>
+      <div class="footer-composition">
+      <div class="footer-copy">
+      <h2 class="studded">Let's&nbsp;build something</h2>
       <p>
         I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
         platforms, pipelines, or whatever you're building.
       </p>
       <div class="actions">
-        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
-        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
-        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+        <span class="email-actions"><a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <button class="copy-email brick brick-ghost" type="button" hidden>Copy</button></span>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
       </div>
-      <p class="hand">Thanks for stopping by.</p>
+      <p class="copy-address" hidden>alec@fielding.cloud</p>
+      <p class="copy-status" role="status" aria-live="polite"></p>
+      <p class="closing">A missing page. Plenty left to explore.</p>
+      <div class="footer-utilities"><button class="print-page text-control" type="button" hidden>Print / save as PDF</button><a class="back-top text-control" href="#top">Back to top</a></div>
       <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+      </div>
+      <img class="footer-art" src="/intro/footer.webp" width="1200" height="900" alt="" aria-hidden="true" loading="lazy" />
+      </div>
     </footer>
   </body>
 </html>

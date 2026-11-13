@@ -204,11 +204,16 @@ test("Projects has its three groups and every Card", () => {
 test("the Full toolbox on Experience is exactly the recorded tools, in order", () => {
   const section = html["experience/index.html"].match(/<section id="toolbox"[\s\S]*?<\/section>/)
   assert.ok(section, "no Full toolbox section")
-  const listed = linesOf(section[0])
-  assert.equal(listed[0], "Full toolbox")
+  assert.equal(linesOf(section[0])[0], "Full toolbox")
+  // Group explanations and the color legend surround the lists; only headings and the
+  // actual list items are tool names. Links must not alter a tool's readable name.
+  const groups = [...section[0].matchAll(/<h3>([\s\S]*?)<\/h3>([\s\S]*?)(?=<\/div>)/g)]
+  const listed = groups.flatMap(([, heading, body]) => [
+    ...linesOf(heading),
+    ...[...body.matchAll(/<ul class="parts">([\s\S]*?)<\/ul>/g)].flatMap(([, items]) => linesOf(items)),
+  ])
   const expected = Object.entries(FULL_TOOLBOX).flatMap(([group, tools]) => [group, ...tools])
-  // Everything from the first group name on: a line of introduction may sit above it.
-  assert.deepEqual(listed.slice(listed.indexOf(expected[0])), expected)
+  assert.deepEqual(listed, expected)
 })
 
 test("no stale or forbidden claim appears on any page, seen or unseen", () => {
@@ -229,6 +234,22 @@ test("no stale or forbidden claim appears on any page, seen or unseen", () => {
     for (const pattern of forbidden) {
       assert.doesNotMatch(checked, pattern, `${page} says ${pattern}`)
     }
+  }
+})
+
+test("visible text has no immediately repeated word", () => {
+  for (const page of PAGES) {
+    for (const line of lines[page]) {
+      // Three separate bricks in the consolidation diagram, each genuinely labelled Jenkins.
+      if (page === "projects/index.html" && line === "Jenkins Jenkins Jenkins") continue
+      assert.doesNotMatch(line, /\b([a-z]+)\s+\1\b/i, `${page}: ${line}`)
+    }
+  }
+})
+
+test("singular counters use singular nouns", () => {
+  for (const page of PAGES) {
+    assert.doesNotMatch(text[page], /\b1 (?:more )?(?:tools|plants|studs)\b/i, page)
   }
 })
 
@@ -276,12 +297,8 @@ test("the shared head lines are the same on every page", () => {
 
 test("the nav is the same on every page and marks the right one", () => {
   const navOf = (page) => flat(html[page].match(/<header class="nav">[\s\S]*?<\/header>/)[0])
-  // The two differences that are meant to be there: the current-page mark, and the About link,
-  // which is in-page on the home page and leads back to it from everywhere else.
-  const plain = (page) => {
-    const nav = navOf(page).replace(/ aria-current="[^"]*"/g, "")
-    return page === HOME ? nav.replace('href="#about"', 'href="/#about"') : nav
-  }
+  // Only the current-page mark varies; all navigation destinations are shared.
+  const plain = (page) => navOf(page).replace(/ aria-current="[^"]*"/g, "")
   for (const page of PAGES) {
     assert.equal(plain(page), plain(HOME), page)
 
@@ -289,17 +306,33 @@ test("the nav is the same on every page and marks the right one", () => {
     const section = page.includes("/") ? page.split("/")[0] : null
     const mark = page === `${section}/index.html` ? "page" : "true"
     const marks = [...navOf(page).matchAll(/href="([^"]*)" aria-current="([^"]*)"/g)].map((m) => `${m[1]} ${m[2]}`)
-    assert.deepEqual(marks, section ? [`/${section}/ ${mark}`] : [], page)
+    assert.deepEqual(marks, page === HOME ? ["/ page"] : section ? [`/${section}/ ${mark}`] : [], page)
   }
 })
 
 test("the footer is the same on every page", () => {
   const footerOf = (page) => flat(html[page].match(/<footer\b[\s\S]*?<\/footer>/)[0])
-  // The home page's footer may add this one sentence.
-  const home = footerOf(HOME).replace(" Brisket talk is welcome too.", "")
-  for (const page of PAGES) {
-    if (page !== HOME) assert.equal(footerOf(page), home, page)
+  // Exactly one plain closing paragraph may vary. All contact copy and controls still match.
+  const shared = (page) => {
+    const footer = footerOf(page)
+    const closings = [...footer.matchAll(/<p class="closing">([^<]+)<\/p>/g)]
+    assert.equal(closings.length, 1, `${page} needs one plain closing line`)
+    assert.ok(closings[0][1].trim().length > 0)
+    return footer.replace(closings[0][0], '<p class="closing"></p>')
   }
+  const home = shared(HOME)
+  for (const page of PAGES) {
+    if (page !== HOME) assert.equal(shared(page), home, page)
+  }
+})
+
+test("the home hero gives a short availability tag and the footer gives the invitation", () => {
+  const availability = linesOf(html[HOME].match(/<p class="availability">[\s\S]*?<\/p>/)?.[0] ?? "").join(" ")
+  assert.match(availability, /platform.*DevOps.*lead roles/)
+  assert.ok(availability.length < 75)
+  const footer = linesOf(html[HOME].match(/<footer\b[\s\S]*?<\/footer>/)[0]).join(" ")
+  assert.match(footer, /platform engineering and DevOps roles, including lead roles/)
+  assert.ok(!footer.includes(availability))
 })
 
 test("the Title block is the same on every page that has one, apart from its word", () => {
@@ -308,9 +341,9 @@ test("the Title block is the same on every page that has one, apart from its wor
     return block ? [[page, flat(block[0])]] : []
   })
   assert.ok(blocks.length > 1, "no Title blocks found")
-  const plain = (block) => block.replace(/title-[a-z]+\./g, "title-WORD.")
+  const plain = (block) => block.replace(/title-[a-z]+(-tall)?\./g, "title-WORD$1.")
   for (const [page, block] of blocks) {
-    const words = new Set([...block.matchAll(/title-([a-z]+)\./g)].map((m) => m[1]))
+    const words = new Set([...block.matchAll(/title-([a-z]+)(?:-tall)?\./g)].map((m) => m[1]))
     assert.equal(words.size, 1, `${page} names more than one word: ${[...words]}`)
     assert.equal(plain(block), plain(blocks[0][1]), page)
   }
@@ -321,6 +354,21 @@ test("the wide and tall Cuts switch at one condition", () => {
   const conditions = new Set([...home.matchAll(/<source\b[^>]*\smedia="([^"]*)"/g)].map((m) => m[1]))
   assert.equal(conditions.size, 1, `the video sources switch at ${[...conditions].join(" and ")}`)
   const [condition] = conditions
+  for (const page of PAGES) {
+    for (const [, media] of html[page].matchAll(/<source\b[^>]*\smedia="([^"]*)"/g)) {
+      assert.equal(media, condition, `${page} switches its Cut at a different condition`)
+    }
+  }
+  for (const page of PAGES.filter(page => html[page].includes('class="title-art"'))) {
+    const sources = [...html[page].matchAll(/<source[^>]*src="([^" ]+-tall\.(?:webm|mp4))"[^>]*media="([^"]+)"/g)]
+    assert.equal(sources.length, 2, `${page} needs both tall Title formats`)
+    const still = html[page].match(/--still-tall:\s*url\('([^']+)'\)/)?.[1]
+    assert.ok(still && existsSync(new URL(still.slice(1), dist)), `${page} needs its tall still`)
+    for (const [, asset, media] of sources) {
+      assert.equal(media, condition, page)
+      assert.ok(existsSync(new URL(asset.slice(1), dist)), asset)
+    }
+  }
   const preloads = [...home.matchAll(/<link\s+rel="preload"[^>]*\smedia="([^"]*)"/g)].map((m) => m[1])
   assert.deepEqual(preloads.sort(), [condition, `not all and ${condition}`].sort())
   // The source stylesheet: the build rewrites the condition into another syntax.
@@ -368,4 +416,15 @@ test("every internal link, anchor and asset leads somewhere", () => {
   for (const [, , path] of css.matchAll(/url\((["']?)(\/[^)"']+)\1\)/g)) {
     assert.ok(existsSync(new URL(path.slice(1), dist)), `the stylesheet points to ${path}, which is not in dist/`)
   }
+})
+
+
+test("Intro progress and Replay agree with the playback length", () => {
+  const module = readFileSync(new URL("src/main.ts", repo), "utf8")
+  const length = Number(module.match(/const FINALE = ([\d.]+)/)?.[1])
+  assert.ok(length > 0)
+  const progress = html[HOME].match(/<progress[^>]*max="([\d.]+)"/)?.[1]
+  const replay = html[HOME].match(/Replay the build[^<]*?([\d.]+) seconds/)?.[1]
+  assert.equal(Number(progress), length)
+  assert.equal(Number(replay), length)
 })

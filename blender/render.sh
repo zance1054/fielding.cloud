@@ -18,8 +18,13 @@ render_frames() {
   # Blender wants a native path for its output template.
   local frames_native
   frames_native="$(cygpath -m "$frames" 2>/dev/null || echo "$frames")"
-  rendered="$(env "$2=$3" "$blender" --background --python "$root/blender/$1" \
-    --render-output "$frames_native/f_####" --render-format PNG --render-anim | tee /dev/stderr)"
+  env "$2=$3" "$blender" --background --python "$root/blender/$1" \
+    --render-output "$frames_native/f_####" --render-format PNG --render-anim > "$frames/render.log" 2>&1 || {
+      cat "$frames/render.log" >&2
+      return 1
+    }
+  rendered="$(cat "$frames/render.log")"
+  printf '%s\n' "$rendered" >&2
 }
 
 # encode <name> <webm crf> <mp4 crf>: VP9 for most browsers, H.264 as the fallback. No audio track.
@@ -52,18 +57,23 @@ for cut in ${CUTS-wide tall}; do
   encode "intro-$cut" 24 19
 
   # First frame: shown while the video loads. Last frame: the hero background it fades into.
-  first="$(ls "$frames" | sort | head -n 1)"
-  last="$(ls "$frames" | sort | tail -n 1)"
-  ffmpeg -y -loglevel error -i "$frames/$first" -c:v libwebp -quality 85 "$out/poster-$cut.webp"
-  ffmpeg -y -loglevel error -i "$frames/$last" -c:v libwebp -quality 93 "$out/hero-$cut.webp"
+  first="$(ls "$frames"/f_*.png | sort | head -n 1)"
+  last="$(ls "$frames"/f_*.png | sort | tail -n 1)"
+  ffmpeg -y -loglevel error -i "$first" -c:v libwebp -quality 85 "$out/poster-$cut.webp"
+  ffmpeg -y -loglevel error -i "$last" -c:v libwebp -quality 93 "$out/hero-$cut.webp"
 done
 
 # Page titles: one clip per word, and its last frame as the still shown without the video.
 for word in ${WORDS-projects experience hobbies cooking gardening}; do
+ for title_cut in ${TITLE_CUTS-wide tall}; do
+  export TITLE_CUT="$title_cut"
+  name="title-$word"
+  if [ "$title_cut" = tall ]; then name="$name-tall"; fi
   render_frames title.py TITLE_WORD "$word"
-  encode "title-$word" 34 24
-  last="$(ls "$frames" | sort | tail -n 1)"
-  ffmpeg -y -loglevel error -i "$frames/$last" -c:v libwebp -quality 82 "$out/title-$word.webp"
+  encode "$name" 34 24
+  last="$(ls "$frames"/f_*.png | sort | tail -n 1)"
+  ffmpeg -y -loglevel error -i "$last" -c:v libwebp -quality 82 "$out/$name.webp"
+ done
 done
 
 rm -rf "$root/blender/frames"

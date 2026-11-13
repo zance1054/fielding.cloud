@@ -1,332 +1,487 @@
 <!doctype html>
+
 <html lang="en">
+
   <head>
+
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
     <title>Experience · Alexander Fielding</title>
+
     <meta
+
       name="description"
-      content="Where Alexander Fielding has worked: co-founder and CTO of The Lobbi Corp, Software Architect at TransUnion from 2019 to 2026, his education and every tool he has used."
+
+      content="Where Alexander Fielding has worked: co-founder and CTO of The Lobbi Corp, Software Architect at TransUnion from Sep 2019 to Aug 2026, his education and every tool he has used."
+
     />
+
     <meta property="og:title" content="Experience · Alexander Fielding" />
-    <meta property="og:description" content="Where Alexander Fielding has worked: co-founder and CTO of The Lobbi Corp, Software Architect at TransUnion from 2019 to 2026, his education and every tool he has used." />
+
+    <meta property="og:description" content="Where Alexander Fielding has worked: co-founder and CTO of The Lobbi Corp, Software Architect at TransUnion from Sep 2019 to Aug 2026, his education and every tool he has used." />
+
     <meta property="og:type" content="website" />
+
     <meta property="og:image" content="https://fielding.cloud/intro/hero-wide.webp" />
+
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
     <link rel="apple-touch-icon" href="/icon.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <link
+
       href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
+
       rel="stylesheet"
+
     />
-    <link rel="preload" href="/intro/title-experience.webp" as="image" type="image/webp" />
+
     <script type="module" src="/src/main.ts"></script>
+
   </head>
-  <body>
+
+  <body id="top">
+
     <a class="skip" href="#main">Skip to content</a>
+
     <header class="nav">
-      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec<span class="nav-surname"> Fielding</span></span></a>
+
       <nav aria-label="Site">
-        <a href="/#about">About</a>
+
         <a href="/projects/">Projects</a>
+
         <a href="/experience/" aria-current="page">Experience</a>
+
         <a href="/hobbies/">Hobbies</a>
-        <a href="#contact">Contact</a>
+
+        <a class="brick nav-contact" href="#contact">Contact</a>
+
       </nav>
+
     </header>
 
+
+
     <main id="main" tabindex="-1">
+
       <h1 class="visually-hidden">Experience</h1>
-      <div class="title-art" style="--still: url('/intro/title-experience.webp')" aria-hidden="true">
+
+
+      <div class="title-art" style="--still: url('/intro/title-experience.webp'); --still-tall: url('/intro/title-experience-tall.webp')" aria-hidden="true">
+
         <video muted playsinline preload="none" tabindex="-1">
+
+          <source src="/intro/title-experience-tall.webm" type="video/webm" media="(max-aspect-ratio: 4/5)" />
+
+          <source src="/intro/title-experience-tall.mp4" type="video/mp4" media="(max-aspect-ratio: 4/5)" />
+
           <source src="/intro/title-experience.webm" type="video/webm" />
+
           <source src="/intro/title-experience.mp4" type="video/mp4" />
+
         </video>
+
       </div>
+
       <script>
+
         // Plays the title being built. Without this, or if the video can't play, the finished
+
         // word (the still behind the video) is what shows.
+
         (() => {
+
           const art = document.currentScript.previousElementSibling;
+
           const video = art.querySelector("video");
+
           if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
           try {
+
             const seen = "title-seen:" + location.pathname;
+
             if (sessionStorage.getItem(seen)) return;
+
             sessionStorage.setItem(seen, "1");
+
           } catch {}
-          const fail = () => delete art.dataset.state;
+
+          const fail = () => { delete art.dataset.state; video.pause(); };
+
+          const timer = setTimeout(fail, 8000);
+
+          video.addEventListener("ended", () => { clearTimeout(timer); fail(); });
+
           art.dataset.state = "play"; // hides the still so the finished word doesn't flash first
+
           video.lastElementChild.addEventListener("error", fail);
+
+          video.addEventListener("error", fail);
+
           video.play().catch(fail);
+
         })();
+
       </script>
+
       <p class="byline">Alec Fielding · Platform engineer</p>
+      <p class="print-contact">fielding.cloud · alec@fielding.cloud · linkedin.com/in/alexander-fielding-6ab223139/ · github.com/zance1054</p>
+
       <nav class="jump" aria-label="On this page">
+
         <a href="#work">Work history</a>
+
         <a href="#education">Education</a>
+
         <a href="#toolbox">Full toolbox</a>
+
       </nav>
 
+
+
       <section id="work" class="section">
-        <h2 class="studded" style="--brick: var(--blue)">Work history</h2>
-        <p class="aside">Newest brick on top.</p>
+
+        <h2 class="studded">Work history</h2>
+
         <figure class="years">
+
           <div class="years-plot">
-            <p style="--brick: var(--red)">The Lobbi Corp <span>Aug 2025 to now</span></p>
-            <div style="--from: 91; --to: 107; --brick: var(--red)"></div>
-            <p style="--brick: var(--blue)">TransUnion <span>Sep 2019 to Aug 2026</span></p>
-            <div style="--from: 20; --to: 104; --brick: var(--blue)"></div>
-            <p style="--brick: var(--yellow)">CSULB Institute for Research and Assessment <span>Nov 2018 to May 2019</span></p>
-            <div style="--from: 10; --to: 16; --brick: var(--yellow)"></div>
-            <p style="--brick: var(--green)">City of LA <span>May to Nov 2018</span></p>
-            <div style="--from: 4; --to: 10; --brick: var(--green)"></div>
+
+            <div class="years-role is-present" style="--from: 91; --to: 107"><p>The Lobbi Corp <span>Aug 2025 to present</span></p><div class="years-bar"></div></div>
+
+            <div class="years-role" style="--from: 20; --to: 104"><p>TransUnion <span>Sep 2019 to Aug 2026</span></p><div class="years-bar"></div></div>
+
+            <div class="years-role" style="--from: 10; --to: 16"><p>CSULB Institute for Research and Assessment <span>Nov 2018 to May 2019</span></p><div class="years-bar"></div></div>
+
+            <div class="years-role" style="--from: 4; --to: 10"><p>City of LA <span>May 2018 to Nov 2018</span></p><div class="years-bar"></div></div>
+
           </div>
+
           <div class="years-axis" aria-hidden="true">
+
             <span>2018</span><span>2020</span><span>2022</span><span>2024</span><span>2026</span>
+
           </div>
-          <figcaption>The last year at TransUnion and the first at Lobbi ran side by side.</figcaption>
+
+          <figcaption>The brighter brick marks the present role. Each bar spans that role's dates. The last year at TransUnion and the first at Lobbi ran side by side.</figcaption>
+
         </figure>
+
         <ol class="timeline">
-          <li id="lobbi" style="--brick: var(--red)">
-            <h3>Co-Founder &amp; CTO <span>The Lobbi Corp, the three-engineer startup behind Wagon Works AI</span></h3>
-            <p class="when">Aug 2025 – present · Remote · alongside TransUnion until Aug 2026</p>
+
+          <li id="lobbi" class="is-present">
+
+            <div class="role-heading"><h3>Co-Founder &amp; CTO <span>The Lobbi Corp</span></h3>
+
+            <p class="when">Aug 2025 to present · Remote · alongside TransUnion until Aug 2026</p>
+
+            <p class="job-scope">Co-led a three-person team to production beta.</p></div>
+
             <ul>
-              <li>
-                Co-led a three-person team that shipped <a href="/projects/#wagon-works">Wagon Works AI</a>, a Microsoft 365 AI workspace
-                desktop app, from v1.0.0 (Aug 2026) through v1.0.28 to external beta testers.
+
+              <li class="role-highlight">
+
+                <a href="/projects/#wagon-works">Wagon Works AI</a> is a Microsoft 365 AI workspace
+
+                desktop app. The beta progressed from v1.0.0 (Aug 2026) through v1.0.28 to external beta&nbsp;testers.
+
               </li>
-              <li>
-                Built a <a href="/projects/#pipeline-factories">GitHub Actions pipeline factory</a> of 19 reusable composite actions (shared build steps), each pinned to an exact version across a 17-repository fleet. The GitHub organization's own settings are kept in Terraform. It cut the release build
+
+              <li class="role-highlight">
+
+                19 reusable composite actions (shared build steps) across a 17-repository fleet: I built the <a href="/projects/#pipeline-factories">GitHub Actions pipeline factory</a>, with each action pinned to an exact version. The GitHub organization's own settings are kept in Terraform. It cut the release build
+
                 job from 11 to 14 minutes down to about 3.4.
+
               </li>
+
               <li>
-                Built an OpenTofu CI factory that provisions pipelines for 10 services across 2 Harness
-                projects from one-line entries, with Snyk, gitleaks and SonarQube gates.
+
+                Built an OpenTofu CI factory (automated pipeline setup) that provisions pipelines for 10 services across 2 Harness
+
+                projects (Harness is a build and deployment platform) from one-line entries, with Snyk, gitleaks and SonarQube checks.
+
               </li>
-              <li>
-                Designed and ran the <a href="/projects/#agent-delivery">agent-driven delivery model</a> under which the team merged 661 pull
-                requests in about 3.5 weeks. Coding agents write the code I deliver.
+
+              <li class="role-highlight">
+
+                661 pull requests merged by the team in about 3.5 weeks under the <a href="/projects/#agent-delivery">agent-driven delivery model</a> I designed and ran. Coding agents write the code I deliver.
+
               </li>
-              <li>Automated production credential rotation on a 7-day cadence with one-command rollback.</li>
-              <li>Led a <a href="/projects/#llm-guardrails">security review</a> of the app before release.</li>
+
+              <li>Automated production credential rotation (replacing access secrets) on a 7-day cadence with one-command rollback (restoring the previous state).</li>
+
+              <li>Led a <a href="/projects/#llm-guardrails">security review</a> of the app before&nbsp;release.</li>
+
             </ul>
+
           </li>
-          <li id="transunion" style="--brick: var(--blue)">
-            <h3>Software Architect, CI/CD Team <span>TransUnion</span></h3>
-            <p class="when">Sep 2019 – Aug 2026 · San Luis Obispo, CA</p>
+
+          <li id="transunion">
+
+            <div class="role-heading"><h3>Software Architect, CI/CD Team <span>TransUnion</span></h3>
+
+            <p class="when">Sep 2019 to Aug 2026 · San Luis Obispo, CA</p>
+
+            <p class="job-scope">Led an 8-person CI/CD team: the build and release systems for 23 development teams.</p></div>
+
             <ul>
-              <li>
-                Led the <a href="/projects/#kubernetes-migration">migration of 80+ applications</a> from Docker EE to Kubernetes ahead of a hard
-                deadline, avoiding $1.8M in enterprise license costs.
+
+              <li class="role-highlight">
+
+                2024 and 2025: during the manager's extended leave, I ran one-on-ones, performance reviews and sprint planning.
+
               </li>
-              <li>
-                Consolidated <a href="/projects/#harness-consolidation">three Jenkins instances onto Harness</a>, covering 408 pipelines, 1,000+
-                repositories and 23 teams.
+
+              <li class="role-highlight">
+
+                80+ applications moved from Docker EE (an enterprise container platform) to Kubernetes, avoiding $1.8M in enterprise license costs. I led the <a href="/projects/#kubernetes-migration">migration</a> ahead of a hard&nbsp;deadline.
+
               </li>
+
+              <li class="role-highlight">
+
+                408 pipelines, 1,000+ repositories and 23 teams: I consolidated <a href="/projects/#harness-consolidation">three Jenkins instances onto Harness</a>.
+
+              </li>
+
               <li>
+
                 Built a Terraform <a href="/projects/#pipeline-factories">"Pipeline Factory"</a> for self-service Harness pipelines, and
-                repository-as-code with standard rules and CODEOWNERS.
+
+                repository settings kept as code, with standard rules and CODEOWNERS (who reviews each part).
+
               </li>
-              <li>Codified Harness RBAC (who is allowed to do what) for 23 teams in OpenTofu on a least-privilege model.</li>
+
+              <li>Codified Harness RBAC (who is allowed to do what) for 23 teams in OpenTofu with only the permissions each team needs.</li>
+
               <li>Implemented Flux CD GitOps deployments (releases driven from Git) for about 40 applications to the company's private cloud.</li>
+
               <li>
+
                 Integrated SonarQube, Checkmarx, Sysdig and Wiz scanning into pipelines, and implemented
-                HashiCorp Vault secrets management.
+
+                HashiCorp Vault secrets&nbsp;management.
+
               </li>
-              <li>
-                Led the 8-person CI/CD team through 2024 and 2025 during the manager's extended leave,
-                running one-on-ones, performance reviews and sprint planning.
-              </li>
+
             </ul>
+
           </li>
-          <li style="--brick: var(--yellow)">
+
+          <li>
+
             <h3>Oracle SQL Programmer <span>CSULB Institute for Research and Assessment</span></h3>
-            <p class="when">Nov 2018 – May 2019 · Long Beach, CA</p>
-            <ul>
-              <li>Wrote Python and SQL tooling to load sensitive education data into Oracle.</li>
-              <li>Worked with Long Beach USD, Long Beach City College and CSULB.</li>
-            </ul>
+
+            <p class="when">Nov 2018 to May 2019 · Long Beach, CA</p>
+
+            <p class="job-scope">Wrote Python and SQL tooling to load sensitive education data into Oracle, working with Long Beach USD, Long Beach City College and CSULB.</p>
+
           </li>
-          <li style="--brick: var(--green)">
+
+          <li>
+
             <h3>Database Design Intern <span>City of LA, Office of the CAO</span></h3>
-            <p class="when">May 2018 – Nov 2018 · Los Angeles, CA</p>
-            <ul>
-              <li>Designed and built a database tracking disaster-grant funding for the city.</li>
-            </ul>
+
+            <p class="when">May 2018 to Nov 2018 · Los Angeles, CA</p>
+
+            <p class="job-scope">Designed and built a database tracking disaster-grant funding for the city.</p>
+
           </li>
+
         </ol>
+
       </section>
+
+
 
       <section id="education" class="section">
-        <h2 class="studded" style="--brick: var(--blue)">Education</h2>
+
+        <h2 class="studded">Education</h2>
+
         <div class="toolbox">
+
           <div>
+
             <h3>Degrees</h3>
-            <p>B.S., Computer Science<br />California State University, Long Beach, 2019</p>
-            <p>A.S., Mathematics<br />Cuesta College, 2017</p>
+
+            <p>B.S., Computer Science<br />California State University, Long Beach,&nbsp;2019</p>
+
+            <p>A.S., Mathematics<br />Cuesta College,&nbsp;2017</p>
+
           </div>
+
           <div>
+
             <h3>Certification</h3>
+
             <p>AWS Certified Cloud Practitioner</p>
+
           </div>
+
           <div>
+
             <h3>Publication</h3>
+
             <p>
+
               "Exploring the Binary Nature of STF 2128 Using Separation and Position Angle
-              Measurements", <cite>Journal of Double Star Observations</cite>, Vol. 14, p. 54
+
+              Measurements", <cite>Journal of Double Star Observations</cite>, Vol. 14, p.&nbsp;54
+
             </p>
+
             <p class="aside">Yes, a double star. Ask me about it.</p>
+
           </div>
+
         </div>
+
       </section>
+
+
 
       <section id="toolbox" class="section">
+
         <h2 class="studded">Full toolbox</h2>
-        <p class="parts-note">Every tool I've used on a job or a project. Each group runs strongest first. The colors follow the home page: blue to build, red to ship, green to run, yellow for agents.</p>
-        <div class="toolbox toolbox-full">
+
+        <p class="parts-note">Every tool I've used on a job or a project. Each group runs strongest first.</p>
+
+        <ul class="toolbox-legend" aria-label="Work and tool colors"><li style="--brick: var(--blue)">Build</li><li style="--brick: var(--red)">Ship</li><li style="--brick: var(--green)">Run</li><li style="--brick: var(--yellow)">Agents</li></ul><p class="legend-note">Agents are software that can carry out tasks using tools.</p><button class="toolbox-toggle brick" type="button" aria-expanded="false" aria-controls="all-tools" hidden>Show all tools</button><div id="all-tools" class="toolbox toolbox-full">
+
           <div style="--brick: var(--blue)">
-            <h3>Languages</h3>
-            <ul class="parts">
-              <li>Python</li>
-              <li>Go</li>
-              <li>PowerShell</li>
-              <li>TypeScript / Electron</li>
-              <li>Groovy</li>
-              <li>Bash</li>
-              <li>HTML/CSS</li>
-              <li>SQL</li>
-              <li>JavaScript</li>
-              <li>Java</li>
-              <li>Socket / UDP messaging</li>
-              <li>C++</li>
-              <li>C#</li>
-              <li>Microsoft Access / VBA</li>
-            </ul>
+
+            <span class="group-category">Build</span><h3>Languages</h3><p class="group-description">For writing applications and automation.</p>
+
+            <ul class="parts"><li><a href="/projects/#kubernetes-migration">Python</a></li><li>Go</li><li>PowerShell</li><li><a href="/projects/#this-site">TypeScript</a> / Electron</li><li class="tool-extra">Groovy</li><li class="tool-extra">Bash</li><li class="tool-extra">HTML/CSS</li><li class="tool-extra">SQL</li><li class="tool-extra">JavaScript</li><li class="tool-extra">Java</li><li class="tool-extra">Socket / UDP messaging</li><li class="tool-extra">C++</li><li class="tool-extra">C#</li><li class="tool-extra">Microsoft Access / VBA</li></ul>
+
           </div>
+
           <div style="--brick: var(--blue)">
-            <h3>Frameworks and web</h3>
-            <ul class="parts">
-              <li>MongoDB / Beanie</li>
-              <li>FastAPI</li>
-              <li>React</li>
-              <li>Django</li>
-              <li>Stripe</li>
-              <li>.NET</li>
-              <li>React Native</li>
-              <li>MERN</li>
-              <li>NumPy / Pandas</li>
-            </ul>
+
+            <span class="group-category">Build</span><h3>Frameworks and web</h3><p class="group-description">Tools for building websites, services and applications.</p>
+
+            <ul class="parts"><li>MongoDB / Beanie</li><li>FastAPI</li><li>React</li><li>Django</li><li class="tool-extra"><a href="/projects/#wagon-works">Stripe</a></li><li class="tool-extra">.NET</li><li class="tool-extra">React Native</li><li class="tool-extra">MERN</li><li class="tool-extra">NumPy / Pandas</li></ul>
+
           </div>
+
           <div style="--brick: var(--green)">
-            <h3>Cloud and infrastructure</h3>
-            <ul class="parts">
-              <li>Kubernetes</li>
-              <li>Unraid / self-hosted Docker</li>
-              <li>Amazon ECS / ECR / CodeArtifact</li>
-              <li>Nginx Proxy Manager / Let's Encrypt</li>
-              <li>PostgreSQL</li>
-              <li>Microsoft 365 platform (Graph, SharePoint, Teams, MSAL)</li>
-              <li>Azure</li>
-              <li>Tailscale</li>
-              <li>Helm</li>
-              <li>Docker EE</li>
-              <li>Private corporate cloud</li>
-              <li>AWS</li>
-              <li>Azure Kubernetes Service (AKS)</li>
-              <li>MySQL / MariaDB</li>
-              <li>AWS ALB / ACM</li>
-              <li>Vercel</li>
-              <li>Cloudflare</li>
-              <li>Linux virtual machines</li>
-              <li>AWS API Gateway</li>
-            </ul>
+
+            <span class="group-category">Run</span><h3>Cloud and infrastructure</h3><p class="group-description">Platforms for hosting applications and storing their data.</p>
+
+            <ul class="parts"><li><a href="/projects/#kubernetes-migration">Kubernetes</a></li><li><a href="/projects/#homelab">Unraid</a> / self-hosted Docker</li><li>Amazon ECS / ECR / CodeArtifact</li><li>Nginx Proxy Manager / Let's Encrypt</li><li class="tool-extra"><a href="/projects/#llm-guardrails">PostgreSQL</a></li><li class="tool-extra">Microsoft 365 platform (Graph, SharePoint, Teams, MSAL)</li><li class="tool-extra"><a href="/projects/#wagon-works">Azure</a></li><li class="tool-extra">Tailscale</li><li class="tool-extra"><a href="/projects/#kubernetes-migration">Helm</a></li><li class="tool-extra">Docker EE</li><li class="tool-extra">Private corporate cloud</li><li class="tool-extra">AWS</li><li class="tool-extra">Azure Kubernetes Service (AKS)</li><li class="tool-extra">MySQL / MariaDB</li><li class="tool-extra">AWS ALB / ACM</li><li class="tool-extra">Vercel</li><li class="tool-extra">Cloudflare</li><li class="tool-extra">Linux virtual machines</li><li class="tool-extra">AWS API Gateway</li></ul>
+
           </div>
+
           <div style="--brick: var(--red)">
-            <h3>CI/CD and DevSecOps</h3>
-            <ul class="parts">
-              <li>Harness</li>
-              <li>CodeRabbit</li>
-              <li>GitHub Actions (composite actions, reusable workflows, self-hosted runners)</li>
-              <li>Docker Hardened Images</li>
-              <li>Doppler</li>
-              <li>Keycloak / OIDC</li>
-              <li>Flux CD</li>
-              <li>SonarQube</li>
-              <li>JFrog Artifactory</li>
-              <li>Sysdig</li>
-              <li>Wiz</li>
-              <li>Checkmarx</li>
-              <li>Jenkins</li>
-              <li>HashiCorp Vault</li>
-              <li>Code signing (Authenticode, SSL.com eSigner)</li>
-              <li>Snyk</li>
-              <li>gitleaks</li>
-              <li>ArgoCD</li>
-            </ul>
+
+            <span class="group-category">Ship</span><h3>CI/CD and DevSecOps</h3><p class="group-description">Tools for building, checking and shipping code.</p>
+
+            <ul class="parts"><li><a href="/projects/#harness-consolidation">Harness</a></li><li>CodeRabbit</li><li><a href="/projects/#pipeline-factories">GitHub Actions</a> (composite actions, reusable workflows, self-hosted runners)</li><li>Docker Hardened Images</li><li class="tool-extra">Doppler</li><li class="tool-extra">Keycloak / OIDC</li><li class="tool-extra">Flux CD</li><li class="tool-extra">SonarQube</li><li class="tool-extra">JFrog Artifactory</li><li class="tool-extra">Sysdig</li><li class="tool-extra">Wiz</li><li class="tool-extra">Checkmarx</li><li class="tool-extra"><a href="/projects/#harness-consolidation">Jenkins</a></li><li class="tool-extra">HashiCorp Vault</li><li class="tool-extra"><a href="/projects/#release-gate">Code signing</a> (Authenticode, SSL.com eSigner)</li><li class="tool-extra">Snyk</li><li class="tool-extra">gitleaks</li><li class="tool-extra">ArgoCD</li></ul>
+
           </div>
+
           <div style="--brick: var(--red)">
-            <h3>Infrastructure as code</h3>
-            <ul class="parts">
-              <li>OpenTofu</li>
-              <li>Terraform</li>
-              <li>GitHub organization as code (Terraform github provider)</li>
-              <li>Bicep</li>
-              <li>Ansible</li>
-            </ul>
+
+            <span class="group-category">Ship</span><h3>Infrastructure as code</h3><p class="group-description">Tools for defining infrastructure in repeatable files.</p>
+
+            <ul class="parts"><li><a href="/projects/#harness-consolidation">OpenTofu</a></li><li><a href="/projects/#pipeline-factories">Terraform</a></li><li>GitHub organization as code (Terraform github provider)</li><li>Bicep</li><li class="tool-extra"><a href="/projects/#homelab">Ansible</a></li></ul>
+
           </div>
+
           <div style="--brick: var(--green)">
-            <h3>Observability</h3>
-            <ul class="parts">
-              <li>Splunk</li>
-              <li>PostHog</li>
-              <li>OpenTelemetry</li>
-              <li>Grafana Alloy</li>
-              <li>Grafana</li>
-            </ul>
+
+            <span class="group-category">Run</span><h3>Observability</h3><p class="group-description">Tools for understanding what applications are doing.</p>
+
+            <ul class="parts"><li>Splunk</li><li><a href="/projects/#release-gate">PostHog</a></li><li>OpenTelemetry</li><li>Grafana Alloy</li><li class="tool-extra">Grafana</li></ul>
+
           </div>
+
           <div style="--brick: var(--red)">
-            <h3>Testing</h3>
-            <ul class="parts">
-              <li>Playwright</li>
-              <li>Selenium</li>
-            </ul>
+
+            <span class="group-category">Ship</span><h3>Testing</h3><p class="group-description">Tools for checking that software behaves as expected.</p>
+
+            <ul class="parts"><li><a href="/projects/#agent-delivery">Playwright</a></li><li>Selenium</li></ul>
+
           </div>
+
           <div style="--brick: var(--yellow)">
-            <h3>AI and agents</h3>
-            <ul class="parts">
-              <li>Multi-agent orchestration</li>
-              <li>T3 Code (agent orchestration)</li>
-              <li>OpenAI Codex</li>
-              <li>Anthropic API</li>
-              <li>MCP (Model Context Protocol)</li>
-              <li>Claude Code</li>
-              <li>LLM application design (structured output, grounding, tool guardrails)</li>
-              <li>LLM tool calling</li>
-              <li>LLM testing with a scripted model</li>
-              <li>Prompt-injection defense</li>
-              <li>Microsoft 365 Copilot APIs</li>
-            </ul>
+
+            <span class="group-category">Agents</span><h3>AI and agents</h3><p class="group-description">Tools for working with coding agents and language models.</p>
+
+            <ul class="parts"><li>Multi-agent orchestration</li><li>T3 Code (agent orchestration)</li><li>OpenAI Codex</li><li>Anthropic API</li><li class="tool-extra">MCP (Model Context Protocol)</li><li class="tool-extra"><a href="/projects/#agent-delivery">Claude Code</a></li><li class="tool-extra">LLM application design (structured output, grounding, tool guardrails)</li><li class="tool-extra">LLM tool calling</li><li class="tool-extra">LLM testing with a scripted model</li><li class="tool-extra">Prompt-injection defense</li><li class="tool-extra">Microsoft 365 Copilot APIs</li></ul>
+
           </div>
+
         </div>
+
+        <button class="toolbox-collapse brick brick-ghost" type="button" aria-controls="all-tools" hidden>Show fewer tools</button>
+
       </section>
+
+      <nav class="page-end section" aria-label="Continue reading"><a class="brick" href="/hobbies/">Next: Hobbies</a></nav>
+
     </main>
 
+
+
     <footer id="contact" class="site-footer">
+
       <div class="course" aria-hidden="true"></div>
-      <h2 class="studded">Let's build something</h2>
+
+      <div class="footer-composition">
+
+      <div class="footer-copy">
+
+      <h2 class="studded">Let's&nbsp;build something</h2>
+
       <p>
+
         I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
+
         platforms, pipelines, or whatever you're building.
+
       </p>
+
       <div class="actions">
-        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
-        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
-        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+
+        <span class="email-actions"><a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+
+        <button class="copy-email brick brick-ghost" type="button" hidden>Copy</button></span>
+
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
+
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
+
       </div>
-      <p class="hand">Thanks for stopping by.</p>
+
+      <p class="copy-address" hidden>alec@fielding.cloud</p>
+
+      <p class="copy-status" role="status" aria-live="polite"></p>
+
+      <p class="closing">From the team to the tools, happy to talk through the work.</p>
+
+      <div class="footer-utilities"><button class="print-page text-control" type="button" hidden>Print / save as PDF</button><a class="back-top text-control" href="#top">Back to top</a></div>
+
       <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+
+      </div>
+
+      <img class="footer-art" src="/intro/footer.webp" width="1200" height="900" alt="" aria-hidden="true" loading="lazy" />
+
+      </div>
+
     </footer>
+
   </body>
+
 </html>

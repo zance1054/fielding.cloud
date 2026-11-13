@@ -20,26 +20,26 @@
       href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=Caveat:wght@700&display=swap"
       rel="stylesheet"
     />
-    <link rel="preload" href="/intro/title-projects.webp" as="image" type="image/webp" />
     <script type="module" src="/src/main.ts"></script>
   </head>
-  <body>
+  <body id="top">
     <a class="skip" href="#main">Skip to content</a>
     <header class="nav">
-      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec Fielding</span></a>
+      <a class="nav-brand" href="/" aria-label="Alec Fielding, home"><span class="nav-brick" aria-hidden="true"></span><span class="nav-name">Alec<span class="nav-surname"> Fielding</span></span></a>
       <nav aria-label="Site">
-        <a href="/#about">About</a>
         <a href="/projects/" aria-current="page">Projects</a>
         <a href="/experience/">Experience</a>
         <a href="/hobbies/">Hobbies</a>
-        <a href="#contact">Contact</a>
+        <a class="brick nav-contact" href="#contact">Contact</a>
       </nav>
     </header>
 
     <main id="main" tabindex="-1">
       <h1 class="visually-hidden">Projects</h1>
-      <div class="title-art" style="--still: url('/intro/title-projects.webp')" aria-hidden="true">
+      <div class="title-art" style="--still: url('/intro/title-projects.webp'); --still-tall: url('/intro/title-projects-tall.webp')" aria-hidden="true">
         <video muted playsinline preload="none" tabindex="-1">
+          <source src="/intro/title-projects-tall.webm" type="video/webm" media="(max-aspect-ratio: 4/5)" />
+          <source src="/intro/title-projects-tall.mp4" type="video/mp4" media="(max-aspect-ratio: 4/5)" />
           <source src="/intro/title-projects.webm" type="video/webm" />
           <source src="/intro/title-projects.mp4" type="video/mp4" />
         </video>
@@ -56,9 +56,12 @@
             if (sessionStorage.getItem(seen)) return;
             sessionStorage.setItem(seen, "1");
           } catch {}
-          const fail = () => delete art.dataset.state;
+          const fail = () => { delete art.dataset.state; video.pause(); };
+          const timer = setTimeout(fail, 8000);
+          video.addEventListener("ended", () => { clearTimeout(timer); fail(); });
           art.dataset.state = "play"; // hides the still so the finished word doesn't flash first
           video.lastElementChild.addEventListener("error", fail);
+          video.addEventListener("error", fail);
           video.play().catch(fail);
         })();
       </script>
@@ -70,67 +73,68 @@
       </nav>
 
       <section class="section">
-        <h2 id="platform" class="studded" style="--brick: var(--blue)">Platform</h2>
+        <ul class="toolbox-legend" aria-label="Work and tool colors"><li style="--brick: var(--blue)">Build</li><li style="--brick: var(--red)">Ship</li><li style="--brick: var(--green)">Run</li><li style="--brick: var(--yellow)">Agents</li></ul><p class="legend-note">Agents are software that can carry out tasks using tools.</p>
+        <h2 id="platform" class="studded" style="--brick: var(--red)">Platform</h2>
         <p class="parts-note">
           The TransUnion and Lobbi work is private, so there's no code to link. I'm happy to
           <a href="#contact">walk through any of it</a>.
         </p>
-        <div class="cards" style="--brick: var(--blue)">
-          <article class="card card-wide card-fig" id="kubernetes-migration">
+        <div class="cards">
+          <article class="card card-fig card-feature" id="kubernetes-migration" style="--brick: var(--green)" data-category="run">
             <div class="card-text">
-              <h3><a href="#kubernetes-migration" title="Link to this project">Docker EE to Kubernetes migration</a></h3>
-              <p class="stat">80+ applications, $1.8M in license costs avoided</p>
+              <h3><a href="#kubernetes-migration" title="Link to this Card">Docker EE to Kubernetes migration</a></h3><span class="card-category">Run</span>
+              <p class="stat"><strong>80+</strong> applications <span>$1.8M in license costs avoided</span></p>
               <p>
-                At TransUnion I led the migration of 80+ applications from Docker EE to Kubernetes ahead
-                of a hard deadline, which avoided $1.8M in enterprise license costs. About 3 of us did
+                Docker EE is an enterprise container platform. At TransUnion I led the move from Docker EE to Kubernetes ahead
+                of a hard deadline. About 3 of us did
                 it over about 18 months. I converted the Compose deployments to Helm charts and wrote a
                 Python health-check library that backs the pod probes for about 80 deployments.
               </p>
-              <p class="aside">Hard deadline. We made it.</p>
-              <p class="tags"><a href="/experience/#transunion">TransUnion, 2019 to 2026</a> · Kubernetes · Helm · Python</p>
             </div>
             <figure class="fig">
               <div class="units" role="img" aria-label="80 studs in four rows of 20, one for each application"></div>
               <figcaption>One stud for each application moved. 80, and then some.</figcaption>
             </figure>
+
+
+          <p class="tags"><span><a href="/experience/#transunion">TransUnion, Sep 2019 to Aug 2026</a></span> <span>Kubernetes</span> <span>Helm</span> <span>Python</span></p>
           </article>
-          <article class="card card-wide card-fig" id="harness-consolidation">
+          <article class="card card-fig" id="harness-consolidation" style="--brick: var(--red)" data-category="ship">
             <div class="card-text">
-              <h3><a href="#harness-consolidation" title="Link to this project">Three Jenkins instances to one Harness platform</a></h3>
+              <h3><a href="#harness-consolidation" title="Link to this Card">Three Jenkins instances to one Harness platform</a></h3><span class="card-category">Ship</span>
               <p class="stat">408 pipelines, 1,000+ repositories, 23 teams</p>
               <p>
                 At TransUnion I consolidated three separately maintained Jenkins instances onto one
-                Harness platform, covering 408 pipelines, 1,000+ repositories and 23 development teams.
+                Harness platform, a build and deployment tool.
                 OpenTofu codifies each team's access on a least-privilege model. Build times stayed
                 about the same, and the gain was one CI system to maintain where there had been three.
               </p>
-              <p class="aside">Not faster. Just one thing to fix when it breaks.</p>
-              <p class="tags"><a href="/experience/#transunion">TransUnion, 2019 to 2026</a> · Harness · Jenkins · OpenTofu</p>
+
             </div>
             <figure class="fig">
               <div class="merge" role="img" aria-label="Three Jenkins bricks become one Harness brick">
                 <div class="merge-from">
-                  <span class="blk blk-grey">Jenkins</span>
-                  <span class="blk blk-grey">Jenkins</span>
-                  <span class="blk blk-grey">Jenkins</span>
+                  <span class="blk">Jenkins</span>
+                  <span class="blk">Jenkins</span>
+                  <span class="blk">Jenkins</span>
                 </div>
                 <span class="merge-arrow"></span>
                 <span class="blk blk-big">Harness</span>
               </div>
               <figcaption>Three CI systems to patch became one.</figcaption>
             </figure>
+          <p class="tags"><span><a href="/experience/#transunion">TransUnion, Sep 2019 to Aug 2026</a></span> <span>Harness</span> <span>Jenkins</span> <span>OpenTofu</span></p>
           </article>
-          <article class="card card-wide card-fig" id="pipeline-factories">
+          <article class="card card-fig" id="pipeline-factories" style="--brick: var(--red)" data-category="ship">
             <div class="card-text">
-              <h3><a href="#pipeline-factories" title="Link to this project">Pipeline factories</a></h3>
-              <p class="stat">Release build job: 11 to 14 minutes, now about 3.4</p>
+              <h3><a href="#pipeline-factories" title="Link to this Card">Pipeline factories</a></h3><span class="card-category">Ship</span>
+              <p class="stat">Shared steps, shorter build jobs</p>
               <p>
                 At TransUnion a team gets a new Harness pipeline by adding an entry to a Terraform file,
                 without waiting on the platform team. At The Lobbi Corp I built a GitHub Actions factory
-                of 19 reusable composite actions (shared build steps), each pinned to an exact version across 17 repositories. It cut the release
-                build job from 11 to 14 minutes down to about 3.4.
+                of 19 reusable composite actions (shared build steps), each pinned to an exact version across 17 repositories.
               </p>
-              <p class="tags"><a href="/experience/#transunion">TransUnion, 2019 to 2026</a> · <a href="/experience/#lobbi">The Lobbi Corp, 2025 to now</a> · Terraform · Harness · GitHub Actions</p>
+
             </div>
             <figure class="fig">
               <div class="bars">
@@ -141,45 +145,22 @@
               </div>
               <figcaption>The release build job. One stud is one minute.</figcaption>
             </figure>
+          <p class="tags"><span><a href="/experience/#transunion">TransUnion, Sep 2019 to Aug 2026</a></span> <span><a href="/experience/#lobbi">The Lobbi Corp, Aug 2025 to present</a></span> <span>Terraform</span> <span>Harness</span> <span>GitHub Actions</span></p>
           </article>
         </div>
 
         <h2 id="product" class="studded" style="--brick: var(--yellow)">Product and AI</h2>
-        <div class="cards" style="--brick: var(--yellow)">
-          <article class="card card-wide card-fig" id="wagon-works">
+        <div class="cards">
+          <article class="card card-fig card-feature" id="agent-delivery" style="--brick: var(--yellow)" data-category="agents">
             <div class="card-text">
-              <h3><a href="#wagon-works" title="Link to this project">Wagon Works AI</a></h3>
-              <p class="stat">In production beta with external testers</p>
-              <p>
-                <a href="https://wagonworksai.com/">Wagon Works</a> is The Lobbi Corp's AI assistant for
-                small teams, a desktop app that works inside their Microsoft 365. It finds the file,
-                names the source and drafts the next step, and a person approves before anything sends.
-                I co-led the three-person team that took it to a production beta, from v1.0.0 through
-                v1.0.28, with Azure-hosted licensing, Stripe seat billing and Entra sign-in.
-              </p>
-              <p class="tags"><a href="/experience/#lobbi">The Lobbi Corp, 2025 to now</a> · Azure · Stripe · Microsoft 365</p>
-            </div>
-            <figure class="fig">
-              <ol class="flow">
-                <li class="blk" style="--c: var(--blue)">Find the file</li>
-                <li class="blk blk-yellow">See the source</li>
-                <li class="blk" style="--c: var(--green)">Approve the next step</li>
-              </ol>
-              <figcaption>The product's three steps. Nothing sends until a person says so.</figcaption>
-            </figure>
-          </article>
-          <article class="card card-wide card-fig" id="agent-delivery">
-            <div class="card-text">
-              <h3><a href="#agent-delivery" title="Link to this project">Agent-driven delivery</a></h3>
-              <p class="stat">The team merged 661 pull requests in about 3.5 weeks</p>
+              <h3><a href="#agent-delivery" title="Link to this Card"><span class="keep-words">Agent-driven delivery</span></a></h3><span class="card-category">Agents</span>
+              <p class="stat">The team merged <strong>661</strong> pull requests <span>in about 3.5 weeks</span></p>
               <p>
                 Coding agents write the code I deliver. I design, rule on decisions, verify and ship. At
                 Lobbi I designed and ran the delivery model, with parallel worktrees, coordinator and
-                worker agents, and cheaper models implementing while stronger models review. Under it
-                the team merged 661 pull requests in about 3.5 weeks, and I merged 103 of them.
+                worker agents, and cheaper models implementing while stronger models review.
               </p>
               <p class="aside">The agents write. I answer for it.</p>
-              <p class="tags"><a href="/experience/#lobbi">The Lobbi Corp, 2025 to now</a> · Claude Code · Codex · Playwright</p>
             </div>
             <figure class="fig">
               <div class="waffle" role="img" aria-label="661 studs, 103 of them yellow">
@@ -197,9 +178,35 @@
                 <span class="key">The rest of the team</span>
               </figcaption>
             </figure>
+
+
+          <p class="tags"><span><a href="/experience/#lobbi">The Lobbi Corp, Aug 2025 to present</a></span> <span>Claude Code</span> <span>Codex</span> <span>Playwright</span></p>
           </article>
-          <article class="card" id="llm-guardrails">
-            <h3><a href="#llm-guardrails" title="Link to this project">LLM features with guardrails</a></h3>
+          <article class="card card-fig" id="wagon-works" style="--brick: var(--red)" data-category="ship">
+            <div class="card-text">
+              <h3><a href="#wagon-works" title="Link to this Card">Wagon Works AI</a></h3><span class="card-category">Ship</span>
+              <p class="stat">In production beta with external testers</p>
+              <p>
+                <a href="https://wagonworksai.com/">Wagon Works<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a> is The Lobbi Corp's AI assistant for
+                small teams, a desktop app that works inside their Microsoft 365. It finds the file,
+                names the source and drafts the next step, and a person approves before anything sends.
+                I co-led the three-person team through v1.0.0 to
+                v1.0.28, with Azure-hosted licensing, Stripe seat billing and Entra sign-in.
+              </p>
+
+            </div>
+            <figure class="fig">
+              <ol class="flow">
+                <li class="blk blk-neutral">Find the file</li>
+                <li class="blk blk-neutral">See the source</li>
+                <li class="blk blk-neutral">Approve the next step</li>
+              </ol>
+              <figcaption>The product's three steps. Nothing sends until a person says so.</figcaption>
+            </figure>
+          <p class="tags"><span><a href="/experience/#lobbi">The Lobbi Corp, Aug 2025 to present</a></span> <span>Azure</span> <span>Stripe</span> <span>Microsoft 365</span></p>
+          </article>
+          <article class="card" id="llm-guardrails" style="--brick: var(--yellow)" data-category="agents">
+            <h3><a href="#llm-guardrails" title="Link to this Card">LLM features <span class="keep-words">with guardrails</span></a></h3><span class="card-category">Agents</span>
             <p class="stat">Nothing publishes until its checks pass</p>
             <p>
               I designed and delivered two pre-release LLM features for Wagon Works through coding
@@ -208,63 +215,75 @@
               before release and set the rule that the assistant's write tools need the person's
               approval once a turn has read outside content.
             </p>
-            <p class="tags"><a href="/experience/#lobbi">The Lobbi Corp, 2025 to now</a> · Claude Code · Codex · PostgreSQL</p>
+
+          <p class="tags"><span><a href="/experience/#lobbi">The Lobbi Corp, Aug 2025 to present</a></span> <span>Claude Code</span> <span>Codex</span> <span>PostgreSQL</span></p>
           </article>
-          <article class="card" id="release-gate">
-            <h3><a href="#release-gate" title="Link to this project">A crash loop that led to a release gate</a></h3>
-            <p class="stat">A release now fails on any unsigned file</p>
+          <article class="card card-wide" id="release-gate" style="--brick: var(--red)" data-category="ship">
+            <div class="card-lead"><h3><a href="#release-gate" title="Link to this Card">A crash loop that led to a release gate</a></h3><span class="card-category">Ship</span>
+            <p class="stat">A release now fails on any unsigned first-party file</p></div>
             <p>
               Wagon Works crash-looped on fresh Windows 11 machines because Smart App Control, a Windows 11 security feature, blocked unsigned DLLs. I diagnosed it from PostHog telemetry and made full-payload code signing
-              a release gate, so a release now fails on any unsigned first-party file.
+              a release gate.
             </p>
-            <p class="tags"><a href="/experience/#lobbi">The Lobbi Corp, 2025 to now</a> · PostHog · GitHub Actions · Code signing</p>
+
+          <p class="tags"><span><a href="/experience/#lobbi">The Lobbi Corp, Aug 2025 to present</a></span> <span>PostHog</span> <span>GitHub Actions</span> <span>Code signing</span></p>
           </article>
         </div>
 
         <h2 id="personal" class="studded" style="--brick: var(--green)">Personal</h2>
-        <div class="cards" style="--brick: var(--green)">
-          <article class="card" id="homelab">
-            <h3><a href="#homelab" title="Link to this project">Homelab</a></h3>
+        <div class="cards">
+          <article class="card" id="homelab" style="--brick: var(--green)" data-category="run">
+            <h3><a href="#homelab" title="Link to this Card">Homelab</a></h3><span class="card-category">Run</span>
             <p class="stat">One server, about 2 years, about 20 Plex users</p>
             <p>
-              I have run one Unraid server for about 2 years. Its Docker services include Plex for
-              about 20 users and Nextcloud on MariaDB, published through Nginx Proxy Manager with
+              Its Docker services include Plex and Nextcloud on MariaDB, published through Nginx Proxy Manager with
               Let's Encrypt certificates and Cloudflare dynamic DNS. An Ansible playbook,
-              <a href="https://github.com/zance1054/unraidAnsible">unraidAnsible</a>, sets the server
-              up, and <a href="https://github.com/zance1054/harnessUnraid">harnessUnraid</a> is a template for running Harness CI/CD delegates (the workers that run its jobs) on Unraid.
+              <a href="https://github.com/zance1054/unraidAnsible">unraidAnsible<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>, sets the server
+              up, and <a href="https://github.com/zance1054/harnessUnraid">harnessUnraid<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a> is a template for running Harness CI/CD delegates (the workers that run its jobs) on Unraid.
             </p>
-            <p class="aside">Plex uptime is a family matter.</p>
-            <p class="tags">Unraid · Docker · Ansible</p>
+
+          <p class="tags"><span>Unraid</span> <span>Docker</span> <span>Ansible</span></p>
           </article>
-          <article class="card" id="this-site">
-            <img src="/intro/hero-wide.webp" alt="The home page pipeline: brick towers labelled Build, Test and Ship" width="1920" height="1080" loading="lazy" />
-            <h3><a href="#this-site" title="Link to this project">This site</a></h3>
+          <article class="card" id="this-site" style="--brick: var(--blue)" data-category="build">
+
+            <h3><a href="#this-site" title="Link to this Card">This site</a></h3><span class="card-category">Build</span>
             <p class="stat">Every animation rebuilds from a script</p>
             <p>
               Built with Vite, TypeScript and Effect. The intro is a Blender scene generated entirely from
-              a Python script and rendered headless, so the animation can be rebuilt from code.
+              a Python script and rendered headless.
             </p>
-            <p class="aside">Yes, I animated a toy version of myself.</p>
-            <p class="tags">TypeScript · Effect · Blender</p>
+
+          <div class="site-picture"><img src="/intro/hero-wide.webp" alt="The home page pipeline: brick towers labelled Build, Test and Ship" width="1920" height="1080" loading="lazy" /></div>
+            <p class="tags"><span>TypeScript</span> <span>Effect</span> <span>Blender</span></p>
           </article>
         </div>
       </section>
+      <nav class="page-end section" aria-label="Continue reading"><a class="brick" href="/experience/">Next: Experience</a></nav>
     </main>
 
     <footer id="contact" class="site-footer">
       <div class="course" aria-hidden="true"></div>
-      <h2 class="studded">Let's build something</h2>
+      <div class="footer-composition">
+      <div class="footer-copy">
+      <h2 class="studded">Let's&nbsp;build something</h2>
       <p>
         I'm open to platform engineering and DevOps roles, including lead roles. I'm also always happy to talk
         platforms, pipelines, or whatever you're building.
       </p>
       <div class="actions">
-        <a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
-        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn</a>
-        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub</a>
+        <span class="email-actions"><a class="brick brick-yellow" href="mailto:alec@fielding.cloud">alec@fielding.cloud</a>
+        <button class="copy-email brick brick-ghost" type="button" hidden>Copy</button></span>
+        <a class="brick brick-ghost" href="https://www.linkedin.com/in/alexander-fielding-6ab223139/">LinkedIn<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
+        <a class="brick brick-ghost" href="https://github.com/zance1054">GitHub<span class="external-cue" aria-hidden="true"></span><span class="visually-hidden"> (external site)</span></a>
       </div>
-      <p class="hand">Thanks for stopping by.</p>
+      <p class="copy-address" hidden>alec@fielding.cloud</p>
+      <p class="copy-status" role="status" aria-live="polite"></p>
+      <p class="closing">Pick a project. I can walk you through it.</p>
+      <div class="footer-utilities"><button class="print-page text-control" type="button" hidden>Print / save as PDF</button><a class="back-top text-control" href="#top">Back to top</a></div>
       <p class="fine">Built brick by brick in San Luis Obispo, CA.</p>
+      </div>
+      <img class="footer-art" src="/intro/footer.webp" width="1200" height="900" alt="" aria-hidden="true" loading="lazy" />
+      </div>
     </footer>
   </body>
 </html>
